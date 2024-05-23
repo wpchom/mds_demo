@@ -1,0 +1,30 @@
+# package
+mds_build_dir = rebase_path("//../../mds_build")
+import("${mds_build_dir}/package.gni")
+
+# toolchain
+import("${mds_build_dir}/repos/toolchains/riscv_none_elf_gcc.gni")
+set_default_toolchain("//:riscv_none_elf_gcc")
+
+# project
+set_defaults("source_set") {
+  configs = [ "//:project_config" ]
+}
+
+set_defaults("static_library") {
+  configs = [ "//:project_config" ]
+}
+
+set_defaults("shared_library") {
+  configs = [ "//:project_config" ]
+}
+
+set_defaults("executable") {
+  configs = [ "//:project_config" ]
+}
+
+declare_args() {
+  project_name = "demo_gd32vf103"
+  project_profile = ""
+  project_version = ""
+}

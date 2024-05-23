@@ -1,0 +1,6 @@
+I2C1_SCL -> PB8
+I2C1_SDA -> PB9
+
+LCD_SDA -> PE14
+LCD_SCL -> PE12
+

@@ -1,0 +1,3 @@
+LCD_LED -> PE10
+
+MCU_LED -> PE3

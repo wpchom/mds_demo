@@ -1,0 +1,16 @@
+
+
+
+// QSPI
+QSPI_BK1_IO3 -> PD13
+QSPI_BK1_IO2 -> PE2
+QSPI_BK1_IO1 -> PD12
+QSPI_BK1_IO0 -> PD11
+QSPI_CLK     -> PB2
+QSPI_BK1_NCS -> PB6
+
+// SPI
+SPI_Flash_MISO -> PB4
+SPI_Flash_MOSI -> PD7
+SPI_Flash_CLK  -> PB3
+SPI_Flash_CS   -> PD6

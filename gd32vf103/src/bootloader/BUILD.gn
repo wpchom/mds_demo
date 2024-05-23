@@ -1,0 +1,96 @@
+pkggroup("mds") {
+  deps = [ "driver/chip/gd32vf103/:chip_gd32vf103_driver" ]
+}
+
+target_flags = [
+  "-march=rv32imac_zicsr",
+  "-mabi=ilp32",
+]
+
+config("project_config") {
+  asmflags = target_flags + [
+               "-fmessage-length=0",
+               "-fdiagnostics-color",
+               "-fno-common",
+               "-x",
+               "assembler-with-cpp",
+             ]
+  cflags = target_flags + [
+             "-fmessage-length=0",
+             "-fdiagnostics-color",
+             "-fno-common",
+             "-fsigned-char",
+             "-ffunction-sections",
+             "-fdata-sections",
+             "-fstack-protector",
+
+             "-Wall",
+             "-Wextra",
+             "-Wstringop-overflow",
+
+             "-g",
+             "-Os",
+           ]
+  ldflags = target_flags + [
+              "-nostartfiles",
+              "--specs=nano.specs",
+              "-Wl,--gc-sections",
+              "-Wl,--print-memory-usage",
+              "-Wl,--no-warn-rwx-segments",
+            ]
+}
+
+executable("${project_name}") {
+  sources = [ "boot_main.c" ]
+
+  deps = [ ":mds" ]
+
+  inputs = [ rebase_path("GD32VF103_FLASH_BOOT.ld") ]
+
+  ldflags = [
+    "-T" + rebase_path("GD32VF103_FLASH_BOOT.ld"),
+    "-Wl,-Map=" + rebase_path("${root_out_dir}/${target_name}.map"),
+  ]
+}
+
+riscv_none_elf_action("${project_name}.dis") {
+  action = "riscv-none-elf-objdump"
+  args = [
+    "-SFhlx",
+    rebase_path("${root_out_dir}/${project_name}.elf") + " > " +
+        rebase_path("${root_out_dir}/${target_name}"),
+  ]
+  deps = [ ":${project_name}" ]
+  outputs = [ "${root_out_dir}/${target_name}" ]
+}
+
+riscv_none_elf_action("${project_name}.bin") {
+  action = "riscv-none-elf-objcopy"
+  args = [
+    "-Obinary",
+    rebase_path("${root_out_dir}/${project_name}.elf"),
+    rebase_path("${root_out_dir}/${target_name}"),
+  ]
+  deps = [ ":${project_name}" ]
+  outputs = [ "${root_out_dir}/${target_name}" ]
+}
+
+riscv_none_elf_action("${project_name}.hex") {
+  action = "riscv-none-elf-objcopy"
+  args = [
+    "-Oihex",
+    rebase_path("${root_out_dir}/${project_name}.elf"),
+    rebase_path("${root_out_dir}/${target_name}"),
+  ]
+  deps = [ ":${project_name}" ]
+  outputs = [ "${root_out_dir}/${target_name}" ]
+}
+
+group("default") {
+  deps = [
+    ":${project_name}",
+    ":${project_name}.bin",
+    ":${project_name}.dis",
+    ":${project_name}.hex",
+  ]
+}
