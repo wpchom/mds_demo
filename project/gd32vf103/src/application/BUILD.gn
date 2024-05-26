@@ -4,7 +4,7 @@ pkggroup("mds") {
     "component/:fs",
     "component/:fs_emfs",
     "component/:lpc",
-    "driver/chip/gd32vf103/:chip_gdvf103_driver",
+    "driver/chip/gd32vf103/:chip_gd32vf103_driver",
   ]
 }
 
@@ -74,6 +74,8 @@ arm_none_eabi_action("${project_name}.bin") {
   action = "arm-none-eabi-objcopy"
   args = [
     "-Obinary",
+    "-R",
+    ".logstr",
     rebase_path("${root_out_dir}/${project_name}.elf"),
     rebase_path("${root_out_dir}/${target_name}"),
   ]
@@ -85,6 +87,21 @@ arm_none_eabi_action("${project_name}.hex") {
   action = "arm-none-eabi-objcopy"
   args = [
     "-Oihex",
+    "-R",
+    ".logstr",
+    rebase_path("${root_out_dir}/${project_name}.elf"),
+    rebase_path("${root_out_dir}/${target_name}"),
+  ]
+  deps = [ ":${project_name}" ]
+  outputs = [ "${root_out_dir}/${target_name}" ]
+}
+
+arm_none_eabi_action("${project_name}.logstr") {
+  action = "arm-none-eabi-objcopy"
+  args = [
+    "-Obinary",
+    "-j",
+    ".logstr",
     rebase_path("${root_out_dir}/${project_name}.elf"),
     rebase_path("${root_out_dir}/${target_name}"),
   ]
@@ -98,5 +115,6 @@ group("default") {
     ":${project_name}.bin",
     ":${project_name}.dis",
     ":${project_name}.hex",
+    ":${project_name}.logstr",
   ]
 }

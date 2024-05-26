@@ -1,6 +1,6 @@
 /******************************************************************************
  * @file     startup_memory.ld
- * @brief    Linker Script for Cortex-M based device
+ * @brief    Linker Script for GD32VF103 based device
  ******************************************************************************/
 
 MEMORY

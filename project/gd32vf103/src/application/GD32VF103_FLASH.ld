@@ -1,6 +1,6 @@
 /******************************************************************************
  * @file     startup_memory.ld
- * @brief    Linker Script for Cortex-M based device
+ * @brief    Linker Script for GD32VF103 based device
  ******************************************************************************/
 
 MEMORY
@@ -22,6 +22,15 @@ ENTRY(Reset_Handler);
 
 SECTIONS
 {
+    .logstr : {
+        . = ALIGN(4);
+
+        *(.logstr .logstr.*)
+        *(.rodata.__FUNCTION__ .rodata.__FUNCTION__.*)
+
+        . = ALIGN(4);
+    } > LOGSTR
+
     .vectors : {
         KEEP ( *(.vectors .vectors.*) )
     } > FLASH
@@ -65,7 +74,6 @@ SECTIONS
         *(.rdata)
         *(.rodata .rodata.*)
         *(.srodata .srodata.*)
-        *(.logstr .logstr.*)
 
         . = ALIGN(4);
     } > FLASH

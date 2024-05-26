@@ -29,14 +29,6 @@ ENTRY(Reset_Handler);
 
 SECTIONS
 {
-    .logstr : {
-        . = ALIGN(4);
-
-        KEEP(*(.logstr .logstr.*))
-
-        . = ALIGN(4);
-    } > LOGSTR
-
     .vectors : {
         KEEP ( *(.vectors .vectors.*) )
     } > FLASH
