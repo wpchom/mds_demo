@@ -1,0 +1,30 @@
+# package
+mds_build_dir = rebase_path("//../../build")
+import("${mds_build_dir}/package.gni")
+
+# toolchain
+import("${mds_build_dir}/repos/toolchains/arm_none_eabi_gcc.gni")
+set_default_toolchain("//:arm_none_eabi_gcc")
+
+# project
+set_defaults("source_set") {
+  configs = [ "//:project_config" ]
+}
+
+set_defaults("static_library") {
+  configs = [ "//:project_config" ]
+}
+
+set_defaults("shared_library") {
+  configs = [ "//:project_config" ]
+}
+
+set_defaults("executable") {
+  configs = [ "//:project_config" ]
+}
+
+declare_args() {
+  project_name = "demo_stm32f103"
+  project_profile = ""
+  project_version = ""
+}

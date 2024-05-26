@@ -1,10 +1,16 @@
 # mds_demo
 
-
-## template for mds demo build
+# directory
 ```
 .
-├── build.py -> mds_build/script/build.py
-├── mds_build
-└── mds_demo
+├── README.md
+├── build    -> https://github.com/wphcom/mds_build.git
+├── build.py -> build/script/build.py
+└── project
 ```
+
+# build script
+./build.py -h
+
+./build.py <buildir> [-d <dotfile>] [-r]
+

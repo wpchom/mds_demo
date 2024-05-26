@@ -3,7 +3,7 @@ script_executable = "python3"
 
 default_args = {
   project_name = "demo_stm32h750"
-  project_profile = "user"
+  project_profile = "boot"
 
   # stm32h7xx_device
   stm32h7xx_device_define = "STM32H750xx"
@@ -12,28 +12,21 @@ default_args = {
   stm32h7xx_hal_conf_dir = rebase_path("//src/board")
 
   # mds_chip_stm32h7xx
-  stm32h7xx_vector_without_interrupt = true
+  chip_stm32h7xx_without_interrupt = true
 
   # mds_kernel
   mds_log_build_level = "MDS_LOG_LEVEL_INFO"
 
+  mds_kernel_interrupt_irq_nums = 166
+  mds_kernel_object_name_size = 16
   mds_kernel_use_assert = true
   mds_kernel_lib_miniable = false
 
   mds_kernel_core_arch = "cortex-m/thumbv7em"
   mds_kernel_core_backtrace = true
-  mds_kernel_hook_enable = true
+  mds_kernel_hook_enable = false
   mds_kernel_memheap_stats = true
   mds_kernel_systick_freq_hz = 1000
-  mds_kernel_object_name_size = 16
 
   mds_kernel_with_sys = true
-  mds_kernel_thread_priority_max = 32
-  mds_kernel_thread_idle_hook_size = 0
-  mds_kernel_thread_idle_stack_size = 384
-  mds_kernel_thread_idle_ticks = 32
-  mds_kernel_thread_timer_enable = false
-  mds_kernel_thread_timer_stack_size = 256
-  mds_kernel_thread_timer_priority = 1
-  mds_kernel_thread_timer_ticks = 16
 }

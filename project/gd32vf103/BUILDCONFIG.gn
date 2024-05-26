@@ -1,5 +1,5 @@
 # package
-mds_build_dir = rebase_path("//../../mds_build")
+mds_build_dir = rebase_path("//../../build")
 import("${mds_build_dir}/package.gni")
 
 # toolchain

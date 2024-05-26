@@ -1,5 +1,5 @@
 #include "mds_sys.h"
-#include "stm32h7xx.h"
+#include "stm32f1xx.h"
 
 void InitThread(MDS_Arg_t *arg)
 {
@@ -14,7 +14,7 @@ int main(void)
 {
     MDS_KernelInit();
 
-    MDS_SysInterruptRegister(SysTick_IRQn, (MDS_IsrHandler_t)MDS_SysTickIncCount, NULL);
+    MDS_CoreInterruptRequestRegister(SysTick_IRQn, (MDS_IsrHandler_t)MDS_SysTickIncCount, NULL);
     MDS_CoreInterruptRequestEnable(SysTick_IRQn);
     SysTick_Config(SystemCoreClock / MDS_SYSTICK_FREQ_HZ);
 
