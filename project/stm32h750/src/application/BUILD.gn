@@ -4,7 +4,7 @@ pkggroup("mds") {
     "component/:fs",
     "component/:fs_emfs",
     "component/:lpc",
-    "component/:segger_systemview",
+    "component/:systemview",
     "driver/chip/stm32h7xx/:chip_stm32h7xx_driver",
   ]
 }
