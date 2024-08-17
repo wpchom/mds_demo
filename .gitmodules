@@ -1,4 +1,0 @@
-[submodule "build"]
-	path = build
-	url = https://github.com/wpchom/mds_build.git
-	branch = master

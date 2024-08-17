@@ -1,5 +1,12 @@
+declare_args() {
+  mds_build_dir = ""
+
+  project_name = "demo_gd32vf103"
+  project_profile = ""
+  project_version = ""
+}
+
 # package
-mds_build_dir = rebase_path("//../../build")
 import("${mds_build_dir}/package.gni")
 
 # toolchain
@@ -21,10 +28,4 @@ set_defaults("shared_library") {
 
 set_defaults("executable") {
   configs = [ "//:project_config" ]
-}
-
-declare_args() {
-  project_name = "demo_gd32vf103"
-  project_profile = ""
-  project_version = ""
 }
