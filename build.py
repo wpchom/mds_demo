@@ -5,8 +5,9 @@ import shutil
 import subprocess
 import argparse
 
-MDS_BUILD_DIR = os.path.join(os.path.dirname(__file__), "..", "mds_build")
-MDS_BUILD_GIT = "git@gitee.com:pchom/mds_build.git"
+MDS_BUILD_GIT = "https://gitee.com/pchom/mds_build.git"
+MDS_BUILD_DIR = os.path.join(
+    os.path.dirname(os.path.realpath(__file__)), "..", "mds_build")
 
 
 def error(message):
@@ -15,79 +16,76 @@ def error(message):
 
 
 def check_git():
-    git_cmd = shutil.which("git")
+    git_bin = shutil.which("git")
 
-    ret = subprocess.run([git_cmd, "--version"], stdout=subprocess.DEVNULL)
+    ret = subprocess.run([git_bin, "--version"], stdout=subprocess.DEVNULL)
     if ret.returncode != 0:
         error("'git' command is erorr")
 
-    return git_cmd
+    return (git_bin)
 
 
-def check_build(git):
-    if os.path.exists(MDS_BUILD_DIR):
-        ret = subprocess.run(
-            [git, "pull"], cwd=MDS_BUILD_DIR, stdout=subprocess.DEVNULL)
-        if ret.returncode != 0:
-            error("Failed to update mds_build, please update it manually")
-    else:
-        ret = subprocess.run(
-            [git, "clone", MDS_BUILD_GIT, MDS_BUILD_DIR], stdout=subprocess.DEVNULL)
+def check_build(git_bin):
+    if not os.path.exists(MDS_BUILD_DIR):
+        ret = subprocess.run([git_bin, "clone", MDS_BUILD_GIT, MDS_BUILD_DIR])
         if ret.returncode != 0:
             error("Failed to clone mds_build")
 
 
-def build_argparse():
+def build_argparse(project_dir):
     parser = argparse.ArgumentParser(
-        description="with ./project/<proj_name>/dotfile/<profile>.gn")
+        description="./build.py <project> [profile]")
 
-    parser.add_argument("project", type=str, nargs="?", const=1,
+    parser.add_argument("project", type=str, choices=os.listdir(os.path.join(project_dir, "src", "project")),
                         help="name for dir where in project for build")
-    parser.add_argument("-f", "--dotfile", type=str, default=None,
-                        help="default all dotfile in project")
-    parser.add_argument("-x", "--proxy", type=str, default=None,
-                        help="proxy server, default: None")
-    parser.add_argument("-r", "--rebuild", dest="rebuild",
-                        action="store_true", default=False,
-                        help="clean output before build")
-    parser.add_argument("-v", "--verbose", dest="verbose",
-                        action="store_true", default=False,
+    parser.add_argument("-f", "--profile", type=str, required=False,
+                        help="default all profile in project")
+
+    parser.add_argument("-k", "--update", action="store_true", default=False,
+                        help="update mds_build from git")
+    parser.add_argument("-r", "--rebuild", action="store_true", default=False,
+                        help="clean outdir before build")
+    parser.add_argument("-v", "--verbose", action="store_true", default=False,
                         help="show build verbose output")
+    parser.add_argument("-x", "--proxy", type=str, default=os.getenv("MDS_BUILD_PROXY"),
+                        help="proxy server, default getenv MDS_BUILD_PROXY")
+
+    parser.add_argument("--args", type=str, default=None,
+                        help="gn gen with args")
 
     args = parser.parse_args()
 
-    if (args.project == None) or (args.project not in os.listdir(os.path.join(os.path.dirname(__file__), "project"))):
-        error("project name `{}` is invailed, please check name in project dir".format(
-            args.project))
-
-    args.buildir = os.path.abspath(os.path.join(
-        os.path.dirname(__file__), "project", args.project))
-    args.outdir = os.path.abspath(os.path.join(
-        os.path.dirname(__file__), "output", args.project))
-
-    return args
+    return (args)
 
 
 def main():
-    check_build(check_git())
+    project_dir = os.path.dirname(os.path.realpath(__file__))
 
-    args = build_argparse()
+    args = build_argparse(project_dir)
 
-    build_args = ["-b", args.buildir, "-o", args.outdir]
-    if (args.dotfile != None):
-        build_args += ["-f", args.dotfile]
-    if (args.proxy != None):
-        build_args += ["-x", args.proxy]
-    if (args.rebuild):
-        build_args += ["-r"]
-    if (args.verbose):
-        build_args += ["-v"]
-        print(' '.join(build_args))
+    buildir = os.path.join(project_dir, "src", "project", args.project)
 
-    result = subprocess.run([os.path.join(
-        MDS_BUILD_DIR, "script/build.py")] + build_args + ["--args", "mds_build_dir=\\\"{}\\\"".format(MDS_BUILD_DIR)])
+    profiles = [os.path.join(buildir, "profile", "{}.gn".format(args.profile))] if args.profile != None else [
+        os.path.join(buildir, "profile", f) for f in os.listdir(os.path.join(buildir, "profile")) if f.endswith(".gn")]
 
-    return (result.returncode)
+    for f in profiles:
+        outdir = os.path.join(project_dir, "out", args.project,
+                              os.path.basename(f).split(".")[0])
+
+        cmd_build = ([os.path.join(MDS_BUILD_DIR, "scripts/build.py"),
+                     "-b", buildir, "-o", outdir, "-f", f] +
+                     (["-x=%s" % args.proxy] if args.proxy else []) +
+                     (["--args=%s" % args.args] if args.args else []) +
+                     (["-v"] if args.verbose else []) +
+                     (["-r"] if args.rebuild else []) +
+                     (["-k"] if args.update else []))
+
+        if args.verbose:
+            print(" ".join(cmd_build))
+
+        res = os.system(" ".join(cmd_build))
+        if res != 0:
+            error("build '{}' failed".format(f))
 
 
 if __name__ == "__main__":

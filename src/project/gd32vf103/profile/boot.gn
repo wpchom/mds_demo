@@ -1,0 +1,23 @@
+buildconfig = "//BUILDCONFIG.gn"
+script_executable = "python3"
+
+default_args = {
+  project_name = "demo_gd32vf103"
+  project_profile = "boot"
+
+  # mds_kernel
+  mds_pkgver = "develop"
+  mds_log_build_level = "MDS_LOG_LEVEL_INFO"
+
+  mds_kernel_object_name_size = 16
+  mds_kernel_use_assert = true
+  mds_kernel_lib_miniable = false
+
+  mds_kernel_core_arch = "risc-v/riscv"
+  mds_kernel_core_backtrace = true
+  mds_kernel_hook_enable = false
+  mds_kernel_memheap_stats = true
+  mds_kernel_systick_freq_hz = 1000
+
+  mds_kernel_with_sys = false
+}

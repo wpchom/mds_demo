@@ -1,0 +1,101 @@
+target_flags = [
+  "-mcpu=cortex-m3",
+  "-mthumb",
+  "-mfloat-abi=soft",
+]
+
+config("project_config") {
+  asmflags = target_flags + [
+               "-fmessage-length=0",
+               "-fdiagnostics-color",
+               "-fno-common",
+               "-x",
+               "assembler-with-cpp",
+             ]
+  cflags = target_flags + [
+             "-fmessage-length=0",
+             "-fdiagnostics-color",
+             "-fno-common",
+             "-ffreestanding",
+             "-fsigned-char",
+             "-ffunction-sections",
+             "-fdata-sections",
+
+             #  "-fanalyzer",
+
+             "-Wall",
+             "-Wextra",
+             "-Wnull-dereference",
+             "-Wstringop-overflow",
+             "-Wdouble-promotion",
+             "-Wshadow",
+             "-Wlogical-op",
+             "-Wredundant-decls",
+
+             "-g",
+             "-Os",
+           ]
+  ldflags = target_flags + [
+              "-nostartfiles",
+              "--specs=nano.specs",
+              "--specs=nosys.specs",
+              "-Wl,--gc-sections",
+              "-Wl,--print-memory-usage",
+              "-Wl,--no-warn-rwx-segments",
+            ]
+}
+
+executable("${project_name}") {
+  sources = [ "boot_main.c" ]
+
+  deps = [ "../board/:board_src" ]
+
+  inputs = [ rebase_path("STM32F103XB_FLASH_BOOT.ld") ]
+
+  ldflags = [
+    "-T" + rebase_path("STM32F103XB_FLASH_BOOT.ld"),
+    "-Wl,-Map=" + rebase_path("${root_out_dir}/${target_name}.map"),
+  ]
+}
+
+arm_none_eabi_action("${project_name}.dis") {
+  action = "arm-none-eabi-objdump"
+  args = [
+    "-SDFhlx",
+    rebase_path("${root_out_dir}/${project_name}.elf") + " > " +
+        rebase_path("${root_out_dir}/${target_name}"),
+  ]
+  deps = [ ":${project_name}" ]
+  outputs = [ "${root_out_dir}/${target_name}" ]
+}
+
+arm_none_eabi_action("${project_name}.bin") {
+  action = "arm-none-eabi-objcopy"
+  args = [
+    "-Obinary",
+    rebase_path("${root_out_dir}/${project_name}.elf"),
+    rebase_path("${root_out_dir}/${target_name}"),
+  ]
+  deps = [ ":${project_name}" ]
+  outputs = [ "${root_out_dir}/${target_name}" ]
+}
+
+arm_none_eabi_action("${project_name}.hex") {
+  action = "arm-none-eabi-objcopy"
+  args = [
+    "-Oihex",
+    rebase_path("${root_out_dir}/${project_name}.elf"),
+    rebase_path("${root_out_dir}/${target_name}"),
+  ]
+  deps = [ ":${project_name}" ]
+  outputs = [ "${root_out_dir}/${target_name}" ]
+}
+
+group("default") {
+  deps = [
+    ":${project_name}",
+    ":${project_name}.bin",
+    ":${project_name}.dis",
+    ":${project_name}.hex",
+  ]
+}

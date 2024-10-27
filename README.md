@@ -12,5 +12,5 @@
 # build script
 ./build.py -h
 
-./build.py <project_name> [-d <dotfile>] [-r]
+./build.py <project> [-d <profile>] [-r]
 

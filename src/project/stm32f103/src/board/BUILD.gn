@@ -1,0 +1,19 @@
+pkggroup("stm32f1xx_device") {
+  deps = [ ":stm32f1xx_system" ]
+}
+
+pkggroup("mds") {
+  deps = [
+    "component/:lpc",
+    "driver/chip/stm32f1xx/:drv_chip_stm32f1xx",
+  ]
+}
+
+source_set("board_src") {
+  sources = [ "board_gpio.c" ]
+
+  public_deps = [
+    ":mds",
+    ":stm32f1xx_device",
+  ]
+}
