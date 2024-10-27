@@ -2,7 +2,9 @@ arm_none_eabi_toolchain("arm_none_eabi_gcc") {
 }
 
 config("project_config") {
-  if (defined(project_profile) && project_profile == "boot") {
+  if (defined(project_profile) && project_profile == "test") {
+    configs = [ "//src/test:project_config" ]
+  } else if (defined(project_profile) && project_profile == "boot") {
     configs = [ "//src/bootloader:project_config" ]
   } else {
     configs = [ "//src/application:project_config" ]
@@ -10,7 +12,9 @@ config("project_config") {
 }
 
 group("default") {
-  if (defined(project_profile) && project_profile == "boot") {
+  if (defined(project_profile) && project_profile == "test") {
+    deps = [ "//src/test:default" ]
+  } else if (defined(project_profile) && project_profile == "boot") {
     deps = [ "//src/bootloader:default" ]
   } else {
     deps = [ "//src/application:default" ]

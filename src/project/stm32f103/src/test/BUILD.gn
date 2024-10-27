@@ -1,0 +1,56 @@
+gcc_toolchain("gcc") {
+}
+
+pkggroup("googletest") {
+  deps = [ ":gtest" ]
+}
+
+config("project_config") {
+  asmflags = [
+    "-fmessage-length=0",
+    "-fdiagnostics-color",
+    "-fno-common",
+    "-x",
+    "assembler-with-cpp",
+  ]
+  cflags = [
+    "-std=c++17",
+    "-fmessage-length=0",
+    "-fdiagnostics-color",
+    "-fno-common",
+    "-fsigned-char",
+    "-ffunction-sections",
+    "-fdata-sections",
+
+    #  "-fanalyzer",
+
+    "-Wall",
+    "-Wextra",
+
+    # "-Wnull-dereference",
+    # "-Wdouble-promotion",
+    # "-Wshadow",
+    # "-Wredundant-decls",
+
+    "-g",
+    "-Os",
+  ]
+}
+
+executable("${project_name}") {
+  sources = [ "test_main.cc" ]
+
+  deps = [ ":googletest" ]
+}
+
+action("default") {
+  script = "${mds_script_dir}/run.py"
+  args = [
+    "${root_out_dir}/${project_name}.elf",
+    "--gtest_color=yes",
+  ]
+
+  outputs = [ "${root_out_dir}/${project_name}.test" ]
+
+  deps = [ ":${project_name}" ]
+}
