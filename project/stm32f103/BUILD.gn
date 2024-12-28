@@ -1,0 +1,57 @@
+arm_none_eabi_toolchain("arm-none-eabi-gcc") {
+}
+
+target_flags = [
+  "-mcpu=cortex-m3",
+  "-mthumb",
+  "-mfloat-abi=soft",
+]
+
+config("project_config") {
+  asmflags = target_flags + [
+               "-fmessage-length=0",
+               "-fdiagnostics-color",
+               "-fno-common",
+               "-x",
+               "assembler-with-cpp",
+             ]
+  cflags = target_flags + [
+             "-fmessage-length=0",
+             "-fdiagnostics-color",
+             "-fno-common",
+             "-ffreestanding",
+             "-fsigned-char",
+             "-ffunction-sections",
+             "-fdata-sections",
+             "-fPIC",
+
+             "-Wall",
+             "-Wextra",
+             "-Wnull-dereference",
+             "-Wstringop-overflow",
+             "-Wdouble-promotion",
+             "-Wshadow",
+             "-Wlogical-op",
+             "-Wredundant-decls",
+
+             "-g",
+             "-Os",
+           ]
+  ldflags = target_flags + [
+              "-nostartfiles",
+              "--specs=nano.specs",
+
+              # "--specs=nosys.specs",
+              "-Wl,--gc-sections",
+              "-Wl,--print-memory-usage",
+              "-Wl,--no-warn-rwx-segments",
+            ]
+}
+
+group("default") {
+  if (defined(project_profile) && project_profile == "boot") {
+    deps = [ "//src/bootloader/:default" ]
+  } else {
+    deps = [ "//src/application/:default" ]
+  }
+}

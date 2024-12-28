@@ -1,4 +1,4 @@
-#include "drv_gpio.h"
+// #include "drv_gpio.h"
 
 void BOARD_GPIO_Init(void)
 {
@@ -10,4 +10,4 @@ void BOARD_GPIO_Init(void)
 
     // DRV_GPIO_PinConfig(GPIOC, GPIO_PIN_13, &pinConfig);
 }
-MDS_INIT_IMPORT(MDS_INIT_PRIORITY_0, BOARD_GPIO_Init);
+// MDS_INIT_IMPORT(MDS_INIT_PRIORITY_0, BOARD_GPIO_Init);

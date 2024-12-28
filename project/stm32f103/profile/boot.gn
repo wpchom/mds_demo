@@ -1,0 +1,9 @@
+buildconfig = "//BUILDCONFIG.gn"
+script_executable = "python3"
+
+default_args = {
+  project_name = "demo_stm32f103"
+  project_profile = "boot"
+
+  import("//profile/common.gni")
+}

@@ -13,7 +13,6 @@ MEMORY
 
 __STACK_SIZE = 0x200;
 __STACK_LOCAL = ORIGIN(RAM) + LENGTH(RAM) - __STACK_SIZE;
-__HEAP_SIZE = __StackLimit - __HeapBase;
 
 /* Linker script to place sections and symbol values. Should be used together
  * with other linker script that defines memory regions FLASH and RAM.
@@ -143,7 +142,7 @@ SECTIONS
         . = ALIGN(8);
         PROVIDE ( __HeapBase = . );
 
-        . += __HEAP_SIZE;
+        *(.heap .heap.*)
 
         . = ALIGN(8);
         PROVIDE ( __HeapLimit = . );

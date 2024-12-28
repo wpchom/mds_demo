@@ -1,0 +1,9 @@
+[submodule "mds_build"]
+	path = mds_build
+	url = git@github.com:wpchom/mds_build
+[submodule "builds"]
+	path = builds
+	url = git@github.com:wpchom/mds_build
+[submodule "repos"]
+	path = repos
+	url = git@github.com:wpchom/xmake-embed

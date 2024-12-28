@@ -13,7 +13,6 @@ MEMORY
 
 __STACK_SIZE = 0x400;
 __STACK_LOCAL = ORIGIN(RAM) + LENGTH(RAM) - __STACK_SIZE;
-__HEAP_SIZE = __StackLimit - __HeapBase;
 
 /* Linker script to place sections and symbol values. Should be used together
  * with other linker script that defines memory regions FLASH and RAM.
@@ -24,15 +23,6 @@ ENTRY(Reset_Handler);
 
 SECTIONS
 {
-    .logstr : {
-        . = ALIGN(4);
-
-        *(.logstr .logstr.*)
-        *(.rodata.__FUNCTION__ .rodata.__FUNCTION__.*)
-
-        . = ALIGN(4);
-    } > LOGSTR
-
     .vectors : {
         KEEP ( *(.vectors .vectors.*) )
     } > FLASH
@@ -152,7 +142,7 @@ SECTIONS
         . = ALIGN(8);
         PROVIDE ( __HeapBase = . );
 
-        . += __HEAP_SIZE;
+        *(.heap .heap.*)
 
         . = ALIGN(8);
         PROVIDE ( __HeapLimit = . );

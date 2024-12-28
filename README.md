@@ -3,14 +3,26 @@
 # directory
 ```
 .
-├── README.md
-├── build.py   # build script
-├── project
-└── output
+├── README.md  # this file
+├── project    # project source files
+├── public     # public source files
+├── builds     # git submodule of [mds_build](https://github.com/wpchom/mds_build)
+└── repos      # git submodule of [xmake-embed](https://github.com/wpchom/xmake-embed)
 ```
 
 # build script
-./build.py -h
 
-./build.py <project> [-d <profile>] [-r]
+## build with gn/ninja
+```
+./builds/build.py -h
+./builds/build.py <dotfile> [-k] [-r] [-v] [-x PROXY] [--args ARGS]
+```
 
+`
+./builds/build.py project/stm32f103/profile/boot.gn
+`
+
+## build with xmake
+```
+xmake -F project/stm32f103/profile/boot.lua
+```

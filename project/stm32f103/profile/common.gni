@@ -1,0 +1,9 @@
+mds_kernel_pkgdef = "/Users/pchom/code/mds/mds/kernel"
+mds_device_pkgdef = "/Users/pchom/code/mds/mds/device"
+drv_chip_stm32f1xx_pkgdef = "/Users/pchom/code/mds/mds/driver/chip/stm32f1xx"
+
+
+mds_kernel_core_arch = "cortex-m/thumbv7em"
+
+stm32f1xx_device_devdef = "STM32F103xB"
+stm32f1xx_hal_driver_confdir = rebase_path("//src/board")

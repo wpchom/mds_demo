@@ -36,4 +36,7 @@ default_args = {
   mds_kernel_thread_timer_stack_size = 256
   mds_kernel_thread_timer_priority = 1
   mds_kernel_thread_timer_ticks = 16
+
+  # mds_component
+  mds_component_fs_emfs = true
 }

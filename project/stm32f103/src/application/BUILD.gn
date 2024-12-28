@@ -1,0 +1,76 @@
+pkggroup("mds_kernel") {
+}
+
+executable("${project_name}") {
+  sources = [ "app_main.c" ]
+
+  deps = [
+    ":mds_kernel",
+    "../board/:board_src",
+  ]
+
+  inputs = [ rebase_path("STM32F103XB_FLASH_APP.ld") ]
+  ldflags = [ "-T" + rebase_path("STM32F103XB_FLASH_APP.ld") ]
+
+  ldflags += [ "-Wl,-Map=" + rebase_path("${root_out_dir}/${target_name}.map") ]
+}
+
+arm_none_eabi_action("${project_name}.dis") {
+  script = "arm-none-eabi-objdump"
+  args = [
+    "-SFhlx",
+    rebase_path("${root_out_dir}/${project_name}.elf") + " > " +
+        rebase_path("${root_out_dir}/${target_name}"),
+  ]
+  deps = [ ":${project_name}" ]
+  outputs = [ "${root_out_dir}/${target_name}" ]
+}
+
+arm_none_eabi_action("${project_name}.bin") {
+  script = "arm-none-eabi-objcopy"
+  args = [
+    "-Obinary",
+    "-R",
+    ".logstr",
+    rebase_path("${root_out_dir}/${project_name}.elf"),
+    rebase_path("${root_out_dir}/${target_name}"),
+  ]
+  deps = [ ":${project_name}" ]
+  outputs = [ "${root_out_dir}/${target_name}" ]
+}
+
+arm_none_eabi_action("${project_name}.hex") {
+  script = "arm-none-eabi-objcopy"
+  args = [
+    "-Oihex",
+    "-R",
+    ".logstr",
+    rebase_path("${root_out_dir}/${project_name}.elf"),
+    rebase_path("${root_out_dir}/${target_name}"),
+  ]
+  deps = [ ":${project_name}" ]
+  outputs = [ "${root_out_dir}/${target_name}" ]
+}
+
+arm_none_eabi_action("${project_name}.logstr") {
+  script = "arm-none-eabi-objcopy"
+  args = [
+    "-Obinary",
+    "-j",
+    ".logstr",
+    rebase_path("${root_out_dir}/${project_name}.elf"),
+    rebase_path("${root_out_dir}/${target_name}"),
+  ]
+  deps = [ ":${project_name}" ]
+  outputs = [ "${root_out_dir}/${target_name}" ]
+}
+
+group("default") {
+  deps = [
+    ":${project_name}",
+    ":${project_name}.bin",
+    ":${project_name}.dis",
+    ":${project_name}.hex",
+    ":${project_name}.logstr",
+  ]
+}
