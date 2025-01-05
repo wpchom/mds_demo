@@ -22,7 +22,7 @@ default_args = {
   mds_kernel_use_assert = true
   mds_kernel_lib_miniable = false
 
-  mds_kernel_core_arch = "cortex-m/thumbv7em"
+  mds_core_arch = "cortex-m/thumbv7em"
   mds_kernel_core_backtrace = true
   mds_kernel_hook_enable = false
   mds_kernel_memheap_stats = true

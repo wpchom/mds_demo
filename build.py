@@ -4,6 +4,13 @@ import os
 import argparse
 
 
+MDS_BUILD_DIR = os.path.join(os.path.expanduser("~"), ".mds_build")
+
+
+def check_build():
+    pass
+
+
 def target_name(gnfile, targetname):
     val = None
     f = open(gnfile)
@@ -16,7 +23,10 @@ def target_name(gnfile, targetname):
 
 
 def main():
-    mds_build_dir = os.path.join(os.path.dirname(__file__), "builds")
+
+    if not os.path.exists(MDS_BUILD_DIR):
+        print("not exist `mds_build`, prepare with: `git clone https://github.com/wpchom/mds_build.git ~/.mds_build`", flush=True)
+        exit(1)
 
     parser = argparse.ArgumentParser(
         description="builds the MDS demo"
@@ -44,7 +54,8 @@ def main():
         outdir = os.path.join(os.getcwd(), 'outdir', target_name(
             os.path.join(profile_path, p + '.gn'), 'project_name'), p)
 
-        build_cmd = ["python3", os.path.join(mds_build_dir, "build.py")]
+        build_cmd = ["python3", os.path.join(
+            MDS_BUILD_DIR, "scripts", "build.py")]
         build_cmd += ["-b", os.path.dirname(profile_path)]
         build_cmd += ["-f", os.path.join(profile_path, p + '.gn')]
         build_cmd += ["-o", outdir]

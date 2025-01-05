@@ -6,4 +6,7 @@ default_args = {
   project_profile = "app"
 
   import("//profile/common.gni")
+
+  # mds
+  mds_idle_lpc_enable = true
 }

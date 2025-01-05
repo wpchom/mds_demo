@@ -13,6 +13,7 @@ MEMORY
 
 __STACK_SIZE = 0x400;
 __STACK_LOCAL = ORIGIN(RAM) + LENGTH(RAM) - __STACK_SIZE;
+__HEAP_SIZE = __StackLimit - __HeapBase;
 
 /* Linker script to place sections and symbol values. Should be used together
  * with other linker script that defines memory regions FLASH and RAM.
@@ -23,7 +24,7 @@ ENTRY(Reset_Handler);
 
 SECTIONS
 {
-    .vectors : {
+    .vectors ORIGIN(FLASH) : {
         KEEP ( *(.vectors .vectors.*) )
     } > FLASH
 
@@ -32,6 +33,8 @@ SECTIONS
         __text_start = .;
 
         *(.text .text.*)
+
+        KEEP ( *(SORT_BY_INIT_PRIORITY(.mds.init.*)) )
 
         KEEP ( *(SORT_BY_NAME(.init) SORT_BY_NAME(.init.*)) )
         KEEP ( *(.fini .fini.*) )
@@ -121,7 +124,7 @@ SECTIONS
     PROVIDE ( _edata = __data_end );
     PROVIDE ( edata = __data_end );
 
-    .bss (NOLOAD) : {
+    .bss : {
         . = ALIGN(4);
         PROVIDE ( __bss_start = . );
         PROVIDE ( __bss_start__ = . );
@@ -133,7 +136,7 @@ SECTIONS
         . = ALIGN(4);
         PROVIDE ( __bss_end = . );
         PROVIDE ( __bss_end__ = . );
-    } > RAM
+    } > RAM AT > RAM
     PROVIDE ( __end = __bss_end );
     PROVIDE ( _end = __bss_end );
     PROVIDE ( end = __bss_end );
@@ -142,7 +145,7 @@ SECTIONS
         . = ALIGN(8);
         PROVIDE ( __HeapBase = . );
 
-        *(.heap .heap.*)
+        . += __HEAP_SIZE;
 
         . = ALIGN(8);
         PROVIDE ( __HeapLimit = . );

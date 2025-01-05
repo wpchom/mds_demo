@@ -16,7 +16,7 @@ executable("${project_name}") {
 }
 
 arm_none_eabi_action("${project_name}.dis") {
-  script = "arm-none-eabi-objdump"
+  script = "objdump"
   args = [
     "-SFhlx",
     rebase_path("${root_out_dir}/${project_name}.elf") + " > " +
@@ -27,7 +27,7 @@ arm_none_eabi_action("${project_name}.dis") {
 }
 
 arm_none_eabi_action("${project_name}.bin") {
-  script = "arm-none-eabi-objcopy"
+  script = "objcopy"
   args = [
     "-Obinary",
     "-R",
@@ -40,7 +40,7 @@ arm_none_eabi_action("${project_name}.bin") {
 }
 
 arm_none_eabi_action("${project_name}.hex") {
-  script = "arm-none-eabi-objcopy"
+  script = "objcopy"
   args = [
     "-Oihex",
     "-R",
@@ -53,7 +53,7 @@ arm_none_eabi_action("${project_name}.hex") {
 }
 
 arm_none_eabi_action("${project_name}.logstr") {
-  script = "arm-none-eabi-objcopy"
+  script = "objcopy"
   args = [
     "-Obinary",
     "-j",

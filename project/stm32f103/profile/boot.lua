@@ -1,4 +1,4 @@
-add_repositories("local-repo " .. path.join(os.scriptdir(), "../../../repos"))
+add_repositories("local-repo " .. path.join(os.scriptdir(), "../../../xbuild"))
 
 add_requires("arm-none-eabi-gcc", {
     system = false
@@ -31,12 +31,12 @@ set_toolchains("arm_none_eabi_toolchain@arm-none-eabi-gcc")
 add_requires("mds_device", "mds_kernel")
 add_requireconfs("**mds_kernel", {
     configs = {
-        use_assert = true
+        assert = true
     }
 })
 
 set_policy("build.intermediate_directory", false)
-set_config("buildir", "out/demo_stm32f103/boot")
+set_config("buildir", "build/demo_stm32f103/boot")
 target("demo_stm32f103", function()
     set_kind("binary")
 
