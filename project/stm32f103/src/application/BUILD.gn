@@ -1,10 +1,14 @@
 pkggroup("mds_kernel") {
 }
 
+pkggroup("mds_component_boot") {
+}
+
 executable("${project_name}") {
   sources = [ "app_main.c" ]
 
   deps = [
+    ":mds_component_boot",
     ":mds_kernel",
     "../board/:board_src",
   ]
@@ -30,8 +34,7 @@ arm_none_eabi_action("${project_name}.bin") {
   script = "objcopy"
   args = [
     "-Obinary",
-    "-R",
-    ".logstr",
+    "-R.logstr",
     rebase_path("${root_out_dir}/${project_name}.elf"),
     rebase_path("${root_out_dir}/${target_name}"),
   ]
@@ -43,8 +46,7 @@ arm_none_eabi_action("${project_name}.hex") {
   script = "objcopy"
   args = [
     "-Oihex",
-    "-R",
-    ".logstr",
+    "-R.logstr",
     rebase_path("${root_out_dir}/${project_name}.elf"),
     rebase_path("${root_out_dir}/${target_name}"),
   ]
@@ -56,13 +58,39 @@ arm_none_eabi_action("${project_name}.logstr") {
   script = "objcopy"
   args = [
     "-Obinary",
-    "-j",
-    ".logstr",
+    "-j.logstr",
     rebase_path("${root_out_dir}/${project_name}.elf"),
     rebase_path("${root_out_dir}/${target_name}"),
   ]
   deps = [ ":${project_name}" ]
   outputs = [ "${root_out_dir}/${target_name}" ]
+}
+
+action("${project_name}.bin.lzma") {
+  script = rebase_path("${mds_build_dir}/scripts/compressor.py")
+  args = [
+    rebase_path("${root_out_dir}/${project_name}.bin"),
+    rebase_path("${root_out_dir}/${project_name}.bin.lzma"),
+    "--dict_size=4096",
+    "--lc=1",
+    "--lp=1",
+    "--pb=1",
+  ]
+  deps = [ ":${project_name}.bin" ]
+  outputs = [ "${root_out_dir}/${project_name}.bin.lzma" ]
+}
+
+action("${project_name}.upkg") {
+  script = rebase_path("${mds_build_dir}/scripts/upkgbin.py")
+  args = [
+    "-t=0xA0A0",
+    "-b",
+    rebase_path("${root_out_dir}/${project_name}.bin.lzma") +
+        ",0x08002800,0x0020",
+    "${root_out_dir}/${project_name}.upkg",
+  ]
+  deps = [ ":${project_name}.bin.lzma" ]
+  outputs = [ "${root_out_dir}/${project_name}.upkg" ]
 }
 
 group("default") {
@@ -72,5 +100,6 @@ group("default") {
     ":${project_name}.dis",
     ":${project_name}.hex",
     ":${project_name}.logstr",
+    ":${project_name}.upkg",
   ]
 }

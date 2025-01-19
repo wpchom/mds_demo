@@ -1,29 +1,26 @@
-#include "mds_sys.h"
-// #include "extend/dev_ntc.h"
-// #include "SEGGER_SYSVIEW.h"
+#include "board.h"
+#include "mds_log.h"
+#include "mds_boot.h"
 
 void InitThread(MDS_Arg_t *arg)
 {
     UNUSED(arg);
 
-    MDS_LOOP {
-        MDS_ThreadDelayMs(1000);
-    }
-}
+    // request
 
-void BOARD_CLOCK_Init(void)
-{
+    MDS_InitExport();
+
+    // release
 }
 
 int main(void)
 {
     BOARD_CLOCK_Init();
 
-    // SysTick_Config(SystemCoreClock / MDS_SYSTICK_FREQ_HZ);
-
     MDS_KernelInit();
 
-    // SEGGER_SYSVIEW_Conf();
+    MDS_BOOT_SwapInfo_t *swapInfo = MDS_BOOT_GetSwapInfo();
+    MDS_LOG_I("[boot] resetReaon:%x", swapInfo->reset);
 
     MDS_Thread_t *thread = MDS_ThreadCreate("init", InitThread, NULL, 1024, 10, 10);
     if (thread != NULL) {
@@ -31,9 +28,4 @@ int main(void)
     }
 
     MDS_KernelStartup();
-}
-
-void SysTick_Handler(void)
-{
-    MDS_ClockIncTickCount();
 }

@@ -6,9 +6,12 @@ pkggroup("drv_chip_stm32f1xx") {
 }
 
 source_set("board_src") {
-  sources = [ "board_gpio.c" ]
+  sources = [
+    "board_clock.c",
+    "board_gpio.c",
+  ]
 
-  deps = [
+  public_deps = [
     ":drv_chip_stm32f1xx",
     ":stm32f1xx_device",
   ]

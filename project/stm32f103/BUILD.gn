@@ -20,10 +20,8 @@ config("project_config") {
              "-fdiagnostics-color",
              "-fno-common",
              "-ffreestanding",
-             "-fsigned-char",
              "-ffunction-sections",
              "-fdata-sections",
-             "-fPIC",
 
              "-Wall",
              "-Wextra",
@@ -38,10 +36,12 @@ config("project_config") {
              "-Os",
            ]
   ldflags = target_flags + [
+              # "-nostdlib",
               "-nostartfiles",
-              "--specs=nano.specs",
 
               # "--specs=nosys.specs",
+              "--specs=nano.specs",
+
               "-Wl,--gc-sections",
               "-Wl,--print-memory-usage",
               "-Wl,--no-warn-rwx-segments",

@@ -6,7 +6,10 @@
 MEMORY
 {
     LOGSTR  (r)     : ORIGIN = 0xFF000000, LENGTH = 16M
-    FLASH   (rx)    : ORIGIN = 0x08000000, LENGTH = 64K
+
+    BOOT    (rx)    : ORIGIN = 0x08000000, LENGTH = 10K
+    FLASH   (rx)    : ORIGIN = 0x08002800, LENGTH = 32K
+    DFT     (rx)    : ORIGIN = 0x0800A800, LENGTH = 22K
 
     RAM     (rwx)   : ORIGIN = 0x20000000, LENGTH = 20K
 }
@@ -109,6 +112,14 @@ SECTIONS
         PROVIDE_HIDDEN ( __zero_table_end__ = . );
     } > FLASH
 
+    .boot ORIGIN(RAM) (NOLOAD) : {
+        . = ALIGN(4);
+
+        KEEP(*(.mds.boot .mds.boot.*))
+
+        . = ALIGN(4);
+    } > RAM
+
     .data : {
         . = ALIGN(4);
         PROVIDE ( __data_start = . );
@@ -162,3 +173,26 @@ SECTIONS
         PROVIDE ( __stack = . );
     } > RAM
 }
+
+/* Alias */
+memset = MDS_MemBuffSet;
+memcpy = MDS_MemBuffCpy;
+memccpy = MDS_MemBuffCcpy;
+memcmp = MDS_MemBuffCmp;
+
+strtoull = MDS_Strtoull;
+strtoll = MDS_Strtoll;
+strtoul = MDS_Strtoul;
+strtol = MDS_Strtol;
+
+vsnprintf = MDS_VaStringNPrintf;
+snprintf = MDS_StringNPrintf;
+vsprintf = MDS_VaStringPrintf;
+sprintf = MDS_StringPrintf;
+vsscanf = MDS_VaStringScanf;
+sscanf = MDS_StringScanf;
+
+vsprintf_s = MDS_VaStringNPrintf;
+sprintf_s = MDS_StringNPrintf;
+vsscanf_s = MDS_VaStringScanfS;
+sscanf_s = MDS_StringScanfS;

@@ -1,5 +1,5 @@
 #include "drv_gpio.h"
-#include "drv_chip.h"
+#include "board.h"
 #include "mds_log.h"
 
 static const struct GPIO_Desc {
@@ -23,7 +23,7 @@ void BOARD_GPIO_Init(void)
     NVIC_EnableIRQ(EXTI1_IRQn);
     NVIC_EnableIRQ(EXTI2_IRQn);
 
-    MDS_Err_t err = DEV_GPIO_ModuleInit(&g_moduleGPIO, "GPIO", &G_DRV_STM32F1XX_GPIO, NULL, NULL);
+    MDS_Err_t err = DEV_GPIO_ModuleInit(&g_moduleGPIO, GPIO_MODULE, &G_DRV_STM32F1XX_GPIO, NULL, NULL);
     if (err != MDS_EOK) {
         MDS_LOG_E("[BRD_GPIO] DEV_GPIO_ModuleInit fail, err:%d", err);
         return;

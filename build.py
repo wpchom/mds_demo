@@ -25,8 +25,12 @@ def target_name(gnfile, targetname):
 def main():
 
     if not os.path.exists(MDS_BUILD_DIR):
-        print("not exist `mds_build`, prepare with: `git clone https://github.com/wpchom/mds_build.git ~/.mds_build`", flush=True)
-        exit(1)
+        try:
+            os.system(
+                "git clone https://github.com/wpchom/mds_build.git %s" % MDS_BUILD_DIR)
+        except:
+            print("not exist `mds_build`, prepare with: `git clone https://github.com/wpchom/mds_build.git ~/.mds_build`", flush=True)
+            exit(1)
 
     parser = argparse.ArgumentParser(
         description="builds the MDS demo"

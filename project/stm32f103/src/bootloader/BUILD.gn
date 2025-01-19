@@ -1,7 +1,21 @@
+pkggroup("stm32f1xx_device") {
+  deps = [ ":stm32f1xx_system" ]
+}
+
+pkggroup("drv_chip_stm32f1xx") {
+}
+
+pkggroup("mds_component_boot") {
+}
+
 executable("${project_name}") {
   sources = [ "boot_main.c" ]
 
-  deps = []
+  deps = [
+    ":drv_chip_stm32f1xx",
+    ":mds_component_boot",
+    ":stm32f1xx_device",
+  ]
 
   inputs = [ rebase_path("STM32F103XB_FLASH_BOOT.ld") ]
   ldflags = [ "-T" + rebase_path("STM32F103XB_FLASH_BOOT.ld") ]
@@ -24,8 +38,7 @@ arm_none_eabi_action("${project_name}.bin") {
   script = "objcopy"
   args = [
     "-Obinary",
-    "-R",
-    ".logstr",
+    "-R.logstr",
     rebase_path("${root_out_dir}/${project_name}.elf"),
     rebase_path("${root_out_dir}/${target_name}"),
   ]
@@ -37,21 +50,7 @@ arm_none_eabi_action("${project_name}.hex") {
   script = "objcopy"
   args = [
     "-Oihex",
-    "-R",
-    ".logstr",
-    rebase_path("${root_out_dir}/${project_name}.elf"),
-    rebase_path("${root_out_dir}/${target_name}"),
-  ]
-  deps = [ ":${project_name}" ]
-  outputs = [ "${root_out_dir}/${target_name}" ]
-}
-
-arm_none_eabi_action("${project_name}.logstr") {
-  script = "objcopy"
-  args = [
-    "-Obinary",
-    "-j",
-    ".logstr",
+    "-R.logstr",
     rebase_path("${root_out_dir}/${project_name}.elf"),
     rebase_path("${root_out_dir}/${target_name}"),
   ]

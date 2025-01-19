@@ -1,2 +1,6 @@
 # mbuild outdir
 outdir/
+
+# eclipse
+.cproject
+.project
