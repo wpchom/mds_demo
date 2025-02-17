@@ -1,6 +1,5 @@
 #include "drv_gpio.h"
 #include "board.h"
-#include "mds_log.h"
 
 static const struct GPIO_Desc {
     DEV_GPIO_Object_t object;

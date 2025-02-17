@@ -1,5 +1,4 @@
 #include "board.h"
-#include "mds_log.h"
 
 #define BOARD_LPC_SLEEP_THRESHOLD 300
 #define BOARD_LPC_SLEEP_MIN       10

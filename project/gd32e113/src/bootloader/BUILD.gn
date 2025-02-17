@@ -1,0 +1,63 @@
+pkggroup("drv_chip_gd32e11x") {
+}
+
+pkggroup("mds_component_boot") {
+}
+
+executable("${project_name}") {
+  sources = [ "boot_main.c" ]
+
+  deps = [
+    ":drv_chip_gd32e11x",
+    ":mds_component_boot",
+  ]
+
+  inputs = [ rebase_path("GD32E113CB_FLASH_BOOT.ld") ]
+  ldflags = [ "-T" + rebase_path("GD32E113CB_FLASH_BOOT.ld") ]
+
+  ldflags += [ "-Wl,-Map=" + rebase_path("${root_out_dir}/${target_name}.map") ]
+}
+
+arm_none_eabi_action("${project_name}.dis") {
+  script = "objdump"
+  args = [
+    "-SFhlx",
+    rebase_path("${root_out_dir}/${project_name}.elf") + " > " +
+        rebase_path("${root_out_dir}/${target_name}"),
+  ]
+  deps = [ ":${project_name}" ]
+  outputs = [ "${root_out_dir}/${target_name}" ]
+}
+
+arm_none_eabi_action("${project_name}.bin") {
+  script = "objcopy"
+  args = [
+    "-Obinary",
+    "-R.logstr",
+    rebase_path("${root_out_dir}/${project_name}.elf"),
+    rebase_path("${root_out_dir}/${target_name}"),
+  ]
+  deps = [ ":${project_name}" ]
+  outputs = [ "${root_out_dir}/${target_name}" ]
+}
+
+arm_none_eabi_action("${project_name}.hex") {
+  script = "objcopy"
+  args = [
+    "-Oihex",
+    "-R.logstr",
+    rebase_path("${root_out_dir}/${project_name}.elf"),
+    rebase_path("${root_out_dir}/${target_name}"),
+  ]
+  deps = [ ":${project_name}" ]
+  outputs = [ "${root_out_dir}/${target_name}" ]
+}
+
+group("default") {
+  deps = [
+    ":${project_name}",
+    ":${project_name}.bin",
+    ":${project_name}.dis",
+    ":${project_name}.hex",
+  ]
+}

@@ -1,0 +1,35 @@
+buildconfig = "//BUILDCONFIG.gn"
+script_executable = "python3"
+
+default_args = {
+  project_name = "demo_gd32e113"
+  project_profile = "app"
+
+  import("//profile/common.gni")
+
+  # mds_kernel
+  mds_log_build_level = "MDS_LOG_LEVEL_INFO"
+  mds_assert_enable = false
+  mds_library_miniable = true
+
+  mds_clock_tick_freq_hz = 1000
+
+  mds_core_arch = "cortex-m/thumbv7em"
+  mds_core_backtrace_depth = 16
+
+  mds_kernel_thread_priority_max = 32
+  mds_kernel_hook_enable = false
+  mds_kernel_stats_enable = false
+  mds_kernel_timer_disable = false
+
+  #timer
+  mds_timer_thread_enable = false
+  mds_timer_thread_priority = 0
+  mds_timer_thread_stacksize = 384
+  mds_timer_thread_ticks = 16
+
+  # idle
+  mds_idle_thread_stacksize = 512
+  mds_idle_thread_ticks = 16
+  mds_idle_lpc_enable = true
+}

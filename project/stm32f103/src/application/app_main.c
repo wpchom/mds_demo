@@ -1,5 +1,4 @@
 #include "board.h"
-#include "mds_log.h"
 #include "mds_boot.h"
 
 void InitThread(MDS_Arg_t *arg)

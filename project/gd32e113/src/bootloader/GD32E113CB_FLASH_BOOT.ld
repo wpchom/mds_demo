@@ -1,6 +1,6 @@
 /******************************************************************************
- * @file     startup_memory.ld
- * @brief    Linker Script for Cortex-M based device
+ * @file     GD32E113CB_FLASH_BOOT.ld
+ * @brief    128KB-FLASH 32KB-RAM GD32E113CB bootloader linker script
  ******************************************************************************/
 
 MEMORY
@@ -8,15 +8,17 @@ MEMORY
     LOGSTR  (r)     : ORIGIN = 0xFF000000, LENGTH = 16M
 
     FLASH   (rx)    : ORIGIN = 0x08000000, LENGTH = 10K
-    APP     (rx)    : ORIGIN = 0x08002800, LENGTH = 32K
-    DFT     (rx)    : ORIGIN = 0x0800A800, LENGTH = 22K
+    NV_DATA (r)     : ORIGIN = 0x08002800, LENGTH = 2K
+    UV_DATA (r)     : ORIGIN = 0x08003000, LENGTH = 4K
+    APP     (rx)    : ORIGIN = 0x08004000, LENGTH = 68K
+    DFT     (rx)    : ORIGIN = 0x08015000, LENGTH = 44K
 
-    RAM     (rwx)   : ORIGIN = 0x20000000, LENGTH = 20K
+    RAM     (rwx)   : ORIGIN = 0x20000000, LENGTH = 32K
 }
 
 __STACK_SIZE = 0x200;
 __STACK_LOCAL = ORIGIN(RAM) + LENGTH(RAM) - __STACK_SIZE;
-__APP_VECT_ADDRESS = ORIGIN(APP);
+JUMP_APP_ADDRESS = ORIGIN(APP);
 
 /* Linker script to place sections and symbol values. Should be used together
  * with other linker script that defines memory regions FLASH and RAM.

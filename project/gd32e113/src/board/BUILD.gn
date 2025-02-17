@@ -1,0 +1,17 @@
+pkggroup("drv_chip_gd32e11x") {
+}
+
+config("board_inc") {
+  include_dirs = [ "./" ]
+}
+
+source_set("board_src") {
+  sources = [
+    "board_clock.c",
+    # "board_gpio.c",
+  ]
+
+  public_configs = [ ":board_inc" ]
+
+  public_deps = [ ":drv_chip_gd32e11x" ]
+}
