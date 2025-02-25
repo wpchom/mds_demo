@@ -1,6 +1,6 @@
 # mds_demo
 
-# directory
+## directory
 ```
 .
 ├── project    # project source files
@@ -9,7 +9,7 @@
 └── README.md  # this file
 ```
 
-# build script
+## build
 ```
 ./build.py <project> <profile> [-r] [-v] [-x PROXY] [--args ARGS]
 ```

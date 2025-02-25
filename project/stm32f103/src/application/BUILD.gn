@@ -1,18 +1,18 @@
 pkggroup("mds_kernel") {
 }
 
-pkggroup("mds_component_emfs") {
+pkggroup("mds_component/emfs") {
 }
 
-pkggroup("mds_component_boot") {
+pkggroup("mds_component/boot") {
 }
 
 executable("${project_name}") {
   sources = [ "app_main.c" ]
 
   deps = [
-    ":mds_component_boot",
-    ":mds_component_emfs",
+    ":mds_component/boot",
+    ":mds_component/emfs",
     ":mds_kernel",
     "../board/:board_src",
   ]

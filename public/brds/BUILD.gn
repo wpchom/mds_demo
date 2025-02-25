@@ -1,0 +1,22 @@
+pkggroup("mds_component/fs") {
+}
+
+pkggroup("mds_component/emfs") {
+}
+
+config("public_board_config") {
+  include_dirs = [ "./" ]
+}
+
+source_set("public_board") {
+  sources = []
+
+  deps = []
+
+  public_configs = [ ":public_board_config" ]
+
+  public_deps = [
+    ":mds_component/emfs",
+    ":mds_component/fs",
+  ]
+}

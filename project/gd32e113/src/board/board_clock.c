@@ -103,15 +103,12 @@ static MDS_LPC_Run_t BOARD_LPC_Run(MDS_LPC_Run_t run)
 static MDS_Tick_t BOARD_LPC_SleepDeep(MDS_Tick_t ticksleep)
 {
     MDS_Tick_t sleeptick = 0;
-    MDS_Err_t err = MDS_EOK;
+    MDS_Err_t err = MDS_ERANGE;
 
     do {
         if (ticksleep < BOARD_LPC_SLEEP_MIN) {
-            err = MDS_ERANGE;
             break;
         }
-
-        NVIC_DisableIRQ(SysTick_IRQn);
 
         err = DRV_RTC_TimerAlarmStartINT(&hrtc, 0, ticksleep);
         if (err != MDS_EOK) {
@@ -119,20 +116,18 @@ static MDS_Tick_t BOARD_LPC_SleepDeep(MDS_Tick_t ticksleep)
         }
 
         err = BOARD_LPC_LowRun();
-        if (err != MDS_EOK) {
-            break;
+        if (err == MDS_EOK) {
+            SysTick->CTRL &= ~SysTick_CTRL_TICKINT_Msk;
+            DRV_PMU_EnterDeepSleepMode(PMU_LDO_LOWPOWER, WFI_CMD);
+            SysTick->CTRL |= SysTick_CTRL_TICKINT_Msk;
         }
 
-        DRV_PMU_EnterDeepSleepMode(PMU_LDO_LOWPOWER, WFI_CMD);
-
         DRV_RTC_AlarmTimerStop(&hrtc);
-
-        sleeptick = DRV_RTC_GetTimerCount(&hrtc);
     } while (0);
 
-    NVIC_EnableIRQ(SysTick_IRQn);
-
-    if (err != MDS_EOK) {
+    if (err == MDS_EOK) {
+        sleeptick = DRV_RTC_GetTimerCount(&hrtc);
+    } else {
         DRV_PMU_EnterSleepMode(WFI_CMD);
     }
 

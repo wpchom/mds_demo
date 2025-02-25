@@ -73,8 +73,8 @@ action("${project_name}.bin.lzma") {
 action("${project_name}.upkg.bin") {
   script = rebase_path("${mds_build_dir}/scripts/upkgbin.py")
   args = [
-    "${root_out_dir}/${project_name}.upkg",  # output file
-    "-l=0xB000",  # file limit
+    "${root_out_dir}/${target_name}",  # output file
+    "-l=44K",  # file limit
     "-b",
     "${root_out_dir}/${project_name}.bin.lzma,0x08004000,0x0020",
   ]

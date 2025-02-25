@@ -5,11 +5,7 @@ void InitThread(MDS_Arg_t *arg)
 {
     UNUSED(arg);
 
-    // request
-
     MDS_InitExport();
-
-    // release
 }
 
 int main(void)

@@ -8,8 +8,12 @@ config("board_inc") {
 source_set("board_src") {
   sources = [
     "board_clock.c",
+    "board_flash.c",
+
     # "board_gpio.c",
   ]
+
+  deps = [ "//../../public/brds/:public_board" ]
 
   public_configs = [ ":board_inc" ]
 

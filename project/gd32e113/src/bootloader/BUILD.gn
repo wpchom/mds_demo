@@ -1,7 +1,7 @@
 pkggroup("drv_chip_gd32e11x") {
 }
 
-pkggroup("mds_component_boot") {
+pkggroup("mds_component/boot") {
 }
 
 executable("${project_name}") {
@@ -9,7 +9,7 @@ executable("${project_name}") {
 
   deps = [
     ":drv_chip_gd32e11x",
-    ":mds_component_boot",
+    ":mds_component/boot",
   ]
 
   inputs = [ rebase_path("GD32E113CB_FLASH_BOOT.ld") ]

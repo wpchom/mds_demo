@@ -10,8 +10,13 @@ extern "C" {
 
 extern void BOARD_CLOCK_Init(void);
 
-#define GPIO_MODULE "gpio"
-#define I2C1_MODULE "i2c1"
+#define FLASH_MODULE "flash"
+#define GPIO_MODULE  "gpio"
+#define I2C1_MODULE  "i2c1"
+
+#define FLASH_NV  "flashNV"
+#define FLASH_UV  "flashUV"
+#define FLASH_DFT "flashDFT"
 
 #ifdef __cplusplus
 }

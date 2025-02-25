@@ -21,4 +21,17 @@ default_args = {
   mds_kernel_hook_enable = false
   mds_kernel_stats_enable = false
   mds_kernel_timer_disable = true
+
+  # mds_component_boot
+  mds_boot_upgrade_retry = 3
+  mds_boot_upgrade_size = 1024
+  mds_boot_upgrade_alloc = false
+  mds_boot_upgrade_hash = true
+
+  mds_boot_with_copy = true
+  mds_boot_with_lzma = true
+  mds_boot_lzma_read_size = 1024
+  mds_boot_lzma_write_size = 1024
+  mds_boot_lzma_dict_size = 4096
+  mds_boot_lzma_probs_size = 10112
 }

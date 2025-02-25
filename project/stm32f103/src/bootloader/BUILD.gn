@@ -5,7 +5,7 @@ pkggroup("stm32f1xx_device") {
 pkggroup("drv_chip_stm32f1xx") {
 }
 
-pkggroup("mds_component_boot") {
+pkggroup("mds_component/boot") {
 }
 
 executable("${project_name}") {
@@ -13,7 +13,7 @@ executable("${project_name}") {
 
   deps = [
     ":drv_chip_stm32f1xx",
-    ":mds_component_boot",
+    ":mds_component/boot",
     ":stm32f1xx_device",
   ]
 
