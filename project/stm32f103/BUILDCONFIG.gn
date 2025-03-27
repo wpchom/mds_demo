@@ -10,7 +10,7 @@ declare_args() {
 import("${mds_build_dir}/package.gni")
 
 # toolchain
-import("${mds_build_dir}/toolchains/arm_none_eabi_toolchain.gni")
+import("${mds_build_dir}/toolchains/arm_none_eabi_gcc.gni")
 set_default_toolchain("//:arm_none_eabi_gcc")
 
 # project

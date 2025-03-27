@@ -1,0 +1,7 @@
+executable("test") {
+  sources = [ "main.c" ]
+}
+
+group("default") {
+  deps = [ ":test" ]
+}

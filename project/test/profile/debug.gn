@@ -1,0 +1,10 @@
+buildconfig = "//BUILDCONFIG.gn"
+script_executable = "python3"
+
+default_args = {
+  project_name = "test"
+  project_profile = "debug"
+  project_version = "0.0.1"
+
+project_cflags = ["-g","-Og"]
+}

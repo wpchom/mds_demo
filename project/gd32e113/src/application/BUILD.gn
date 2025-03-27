@@ -57,22 +57,23 @@ arm_none_eabi_action("${project_name}.logstr") {
 }
 
 action("${project_name}.bin.lzma") {
-  script = rebase_path("${mds_build_dir}/scripts/compressor.py")
+  script = rebase_path("${mds_build_dir}/mds.py")
   args = [
+    "compress",
     rebase_path("${root_out_dir}/${project_name}.bin"),
+    "-o",
     rebase_path("${root_out_dir}/${project_name}.bin.lzma"),
-    "--dict_size=4096",
-    "--lc=1",
-    "--lp=1",
-    "--pb=1",
+    "--format=lzma",
+    "--args=dict_size=4096,lc=1,lp=1,pb=1",
   ]
   deps = [ ":${project_name}.bin" ]
   outputs = [ "${root_out_dir}/${project_name}.bin.lzma" ]
 }
 
 action("${project_name}.upkg.bin") {
-  script = rebase_path("${mds_build_dir}/scripts/upkgbin.py")
+  script = rebase_path("${mds_build_dir}/mds.py")
   args = [
+    "upkgbin",
     "${root_out_dir}/${target_name}",  # output file
     "-l=44K",  # file limit
     "-b",

@@ -1,27 +1,35 @@
-arm_none_eabi_toolchain("arm_none_eabi_gcc") {
+arm_none_eabi_gcc("arm_none_eabi_gcc") {
 }
 
-target_flags = [
-  "-mcpu=cortex-m4",
-  "-mthumb",
-  "-mfloat-abi=soft",
-]
+declare_args() {
+  target_flags = [
+    "-mcpu=cortex-m4",
+    "-mthumb",
+    "-mfloat-abi=soft",
+  ]
+  project_asmflags = []
+  project_cflags = []
+  project_cflags_c = []
+  project_cflags_cc = []
+  project_arflags = []
+  project_ldflags = []
+}
 
 config("project_config") {
-  asmflags = target_flags + [
+  asmflags = target_flags + project_asmflags + [
                "-fmessage-length=0",
                "-fdiagnostics-color",
                "-fno-common",
                "-x",
                "assembler-with-cpp",
              ]
-  cflags = target_flags + [
+  cflags = target_flags + project_cflags + [
              "-fmessage-length=0",
              "-fdiagnostics-color",
              "-fno-common",
-             "-ffreestanding",
              "-ffunction-sections",
              "-fdata-sections",
+             "-ffreestanding",
 
              "-Wall",
              "-Wextra",
@@ -35,7 +43,10 @@ config("project_config") {
              "-g",
              "-Os",
            ]
-  ldflags = target_flags + [
+  cflags_c = project_cflags_c
+  cflags_cc = project_cflags_cc
+  arflags = project_arflags
+  ldflags = target_flags + project_ldflags + [
               # "-nostdlib",
               "-nostartfiles",
 

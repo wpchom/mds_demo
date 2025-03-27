@@ -1,7 +1,7 @@
 # package
 
 # mds_kernel
-mds_core_arch = "cortex-m/thumbv7em"
+mds_core_architecture = "cortex-m/thumbv7em"
 
 # stm32f1xx_device
 stm32f1xx_device_devdef = "STM32F103xB"

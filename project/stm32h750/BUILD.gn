@@ -1,18 +1,69 @@
-arm_none_eabi_toolchain("arm_none_eabi_gcc") {
+arm_none_eabi_gcc("arm_none_eabi_gcc") {
+}
+
+declare_args() {
+  target_flags = [
+    "-mcpu=cortex-m7",
+    "-mthumb",
+    "-mfloat-abi=hard",
+    "-mfpu=fpv5-sp-d16",
+  ]
+  project_asmflags = []
+  project_cflags = []
+  project_cflags_c = []
+  project_cflags_cc = []
+  project_arflags = []
+  project_ldflags = []
 }
 
 config("project_config") {
-  if (defined(project_profile) && project_profile == "boot") {
-    configs = [ "//src/bootloader:project_config" ]
-  } else {
-    configs = [ "//src/application:project_config" ]
-  }
+  asmflags = target_flags + project_asmflags + [
+               "-fmessage-length=0",
+               "-fdiagnostics-color",
+               "-fno-common",
+               "-x",
+               "assembler-with-cpp",
+             ]
+  cflags = target_flags + project_cflags + [
+             "-fmessage-length=0",
+             "-fdiagnostics-color",
+             "-fno-common",
+             "-ffunction-sections",
+             "-fdata-sections",
+             "-ffreestanding",
+
+             "-Wall",
+             "-Wextra",
+             "-Wnull-dereference",
+             "-Wstringop-overflow",
+             "-Wdouble-promotion",
+             "-Wshadow",
+             "-Wlogical-op",
+             "-Wredundant-decls",
+
+             "-g",
+             "-Os",
+           ]
+  cflags_c = project_cflags_c
+  cflags_cc = project_cflags_cc
+  arflags = project_arflags
+  ldflags = target_flags + project_ldflags + [
+              # "-nostdlib",
+              "-nostartfiles",
+
+              # "--specs=nosys.specs",
+              "--specs=nano.specs",
+
+              "-Wl,--gc-sections",
+              "-Wl,--print-memory-usage",
+              "-Wl,--no-warn-rwx-segments",
+            ]
 }
 
 group("default") {
   if (defined(project_profile) && project_profile == "boot") {
-    deps = [ "//src/bootloader:default" ]
+    deps = [ "//src/bootloader/:default" ]
   } else {
-    deps = [ "//src/application:default" ]
+    deps = [ "//src/application/:default" ]
   }
 }

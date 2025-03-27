@@ -1,0 +1,37 @@
+gcc_toolchain("gcc") {
+}
+
+declare_args() {
+  project_asmflags = []
+  project_cflags = []
+  project_cflags_c = []
+  project_cflags_cc = []
+  project_arflags = []
+  project_ldflags = []
+}
+
+config("project_config") {
+  asmflags = project_asmflags
+  cflags = project_cflags + [
+             "-fmessage-length=0",
+             "-fdiagnostics-color",
+             "-fno-common",
+             "-ffunction-sections",
+             "-fdata-sections",
+
+             "-Wall",
+             "-Wextra",
+             "-Wnull-dereference",
+             "-Wdouble-promotion",
+             "-Wshadow",
+             "-Wredundant-decls",
+           ]
+  cflags_c = project_cflags_c
+  cflags_cc = project_cflags_cc
+  arflags = project_arflags
+  ldflags = project_ldflags
+}
+
+group("default") {
+  deps = [ "//src/:default" ]
+}

@@ -33,9 +33,9 @@ static int BOOT_FlashRead(MDS_BOOT_Device_t *dev, uintptr_t ofs, uint8_t *data, 
 {
     BOOT_FlashDevice_t *flashDev = (BOOT_FlashDevice_t *)dev;
 
-    MDS_Err_t err = DRV_FLASH_Read(flashDev->baseAddr + ofs, data, len, NULL);
+    MDS_MemBuffCopy(data, len, (void *)(flashDev->baseAddr + ofs), len);
 
-    return ((err != MDS_EOK) ? (-1) : (0));
+    return (0);
 }
 
 static int BOOT_FlashWrite(MDS_BOOT_Device_t *dev, uintptr_t ofs, const uint8_t *data, size_t len)
