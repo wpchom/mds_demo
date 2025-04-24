@@ -71,29 +71,30 @@ arm_none_eabi_action("${project_name}.logstr") {
 }
 
 action("${project_name}.bin.lzma") {
-  script = rebase_path("${mds_build_dir}/scripts/compressor.py")
+  script = rebase_path("${mds_build_dir}/mds.py")
   args = [
+    "compress",
     rebase_path("${root_out_dir}/${project_name}.bin"),
+    "-o",
     rebase_path("${root_out_dir}/${project_name}.bin.lzma"),
-    "--dict_size=4096",
-    "--lc=1",
-    "--lp=1",
-    "--pb=1",
+    "--format=lzma",
+    "--args=dict_size=4096,lc=1,lp=1,pb=1",
   ]
   deps = [ ":${project_name}.bin" ]
-  outputs = [ "${root_out_dir}/${project_name}.bin.lzma" ]
+  outputs = [ "${root_out_dir}/${target_name}" ]
 }
 
 action("${project_name}.upkg.bin") {
-  script = rebase_path("${mds_build_dir}/scripts/upkgbin.py")
+  script = rebase_path("${mds_build_dir}/mds.py")
   args = [
-    "${root_out_dir}/${project_name}.upkg",  # output file
+    "upkgbin",
+    "${root_out_dir}/${project_name}.upkg.bin",  # output file
     "-l=0x5800",  # file limit
     "-b",
     "${root_out_dir}/${project_name}.bin.lzma,0x08002800,0x0020",
   ]
   deps = [ ":${project_name}.bin.lzma" ]
-  outputs = [ "${root_out_dir}/${project_name}.upkg" ]
+  outputs = [ "${root_out_dir}/${target_name}" ]
 }
 
 group("default") {

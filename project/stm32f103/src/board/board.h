@@ -8,7 +8,7 @@
 extern "C" {
 #endif
 
-extern void BOARD_CLOCK_Init(void);
+void BOARD_CLOCK_Init(void);
 
 #define GPIO_MODULE "gpio"
 #define I2C1_MODULE "i2c1"

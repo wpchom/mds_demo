@@ -6,5 +6,8 @@ default_args = {
   project_profile = "debug"
   project_version = "0.0.1"
 
-project_cflags = ["-g","-Og"]
+  project_cflags = [
+    "-g",
+    "-Og",
+  ]
 }

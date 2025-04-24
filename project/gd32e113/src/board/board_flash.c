@@ -18,19 +18,19 @@ static void BOARD_FLASH_Init(void)
     err = DEV_STORAGE_PeriphInit(&g_flashNV, FLASH_NV, &g_flashAdaptr);
     if (err == MDS_EOK) {
         g_flashNV.object.baseAddr = 0x08002800;
-        g_flashNV.object.blockNums = 10 * 1024 / DRV_FLASH_PAGE_SIZE;
+        g_flashNV.object.sectorNums = 10 * 1024 / DRV_FLASH_PAGE_SIZE;
     }
 
     err = DEV_STORAGE_PeriphInit(&g_flashUV, FLASH_UV, &g_flashAdaptr);
     if (err == MDS_EOK) {
         g_flashUV.object.baseAddr = 0x08003000;
-        g_flashUV.object.blockNums = 4 * 1024 / DRV_FLASH_PAGE_SIZE;
+        g_flashUV.object.sectorNums = 4 * 1024 / DRV_FLASH_PAGE_SIZE;
     }
 
     err = DEV_STORAGE_PeriphInit(&g_flashDFT, FLASH_DFT, &g_flashAdaptr);
     if (err == MDS_EOK) {
         g_flashDFT.object.baseAddr = 0x08015000;
-        g_flashDFT.object.blockNums = 44 * 1024 / DRV_FLASH_PAGE_SIZE;
+        g_flashDFT.object.sectorNums = 44 * 1024 / DRV_FLASH_PAGE_SIZE;
     }
 }
 MDS_INIT_IMPORT(MDS_INIT_PRIORITY_1, BOARD_FLASH_Init);

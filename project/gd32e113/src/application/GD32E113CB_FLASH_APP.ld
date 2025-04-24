@@ -184,14 +184,9 @@ strtoll = MDS_Strtoll;
 strtoul = MDS_Strtoul;
 strtol = MDS_Strtol;
 
-vsnprintf = MDS_VaStringNPrintf;
-snprintf = MDS_StringNPrintf;
-vsprintf = MDS_VaStringPrintf;
-sprintf = MDS_StringPrintf;
-vsscanf = MDS_VaStringScanf;
-sscanf = MDS_StringScanf;
-
-vsprintf_s = MDS_VaStringNPrintf;
-sprintf_s = MDS_StringNPrintf;
-vsscanf_s = MDS_VaStringScanfS;
-sscanf_s = MDS_StringScanfS;
+vsnprintf = MDS_Vsnprintf;
+snprintf = MDS_Snprintf;
+vsprintf = MDS_Vsprintf;
+sprintf = MDS_Sprintf;
+vsscanf = MDS_Vsscanf;
+sscanf = MDS_Sscanf;

@@ -8,7 +8,7 @@
 extern "C" {
 #endif
 
-extern const MDS_FileSystem_t *FILE_SYSTEM_DATA(void);
+const MDS_FileSystem_t *FILE_SYSTEM_DATA(void);
 
 #define PUBLIC_FILE_LIST                                                                                               \
     PUBLIC_FILE_DEF(FILE_ID_BOOTINFO, FILE_SYSTEM_DATA, 0x00, MDS_EMFS_FileDesc_t)                                     \
