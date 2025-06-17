@@ -1,4 +1,4 @@
-#include "mds_boot.h"
+#include "boot/mds_boot.h"
 #include "drv_chip.h"
 #include "drv_flash.h"
 
@@ -66,8 +66,8 @@ int main(void)
 {
     HAL_Init();
 
-#if (MDS_CLOCK_TICK_FREQ_HZ != 1000U)
-    SysTick_Config(SystemCoreClock / MDS_CLOCK_TICK_FREQ_HZ);
+#if (CONFIG_MDS_CLOCK_TICK_FREQ_HZ != 1000U)
+    SysTick_Config(SystemCoreClock / CONFIG_MDS_CLOCK_TICK_FREQ_HZ);
 #endif
 
     MDS_BOOT_SwapInfo_t *swapInfo = MDS_BOOT_GetSwapInfo();
@@ -77,7 +77,8 @@ int main(void)
     }
 
     MDS_BOOT_Result_t result = MDS_BOOT_UpgradeCheck(swapInfo, (MDS_BOOT_Device_t *)(&g_flashApp),
-                                                     (MDS_BOOT_Device_t *)(&g_flashDft), &G_BOOT_UPGRADE_OPS);
+                                                     (MDS_BOOT_Device_t *)(&g_flashDft),
+                                                     &G_BOOT_UPGRADE_OPS);
     switch (result) {
         case MDS_BOOT_RESULT_NONE:
         case MDS_BOOT_RESULT_SUCCESS:
@@ -95,5 +96,5 @@ int main(void)
 
 void SysTick_Handler(void)
 {
-    MDS_ClockIncTickCount();
+    MDS_SysTickHandler();
 }

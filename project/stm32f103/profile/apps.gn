@@ -2,16 +2,15 @@ buildconfig = "//BUILDCONFIG.gn"
 script_executable = "python3"
 
 default_args = {
-  project_name = "demo_stm32h750"
-  project_profile = "debug"
-  project_version = "0.0.1"
+  project_name = "demo_stm32f103"
+  project_profile = "app"
 
   import("//profile/common.gni")
 
-  # mds
+  # mds_kernel
   mds_tick_u64 = false
   mds_library_miniable = true
-  mds_object_name_size = 11
+  mds_object_name_size = 7
   mds_clock_tick_freq_hz = 1000
   mds_core_backtrace_depth = 16
 
@@ -23,7 +22,7 @@ default_args = {
   mds_kernel_log_level = "MDS_LOG_LEVEL_WRN"
   mds_kernel_smp_cpus = 1
   mds_kernel_thread_priority_max = 32
-  mds_kernel_stats_enable = true
+  mds_kernel_stats_enable = false
 
   mds_timer_independent = true
   mds_timer_thread_priority = 0
@@ -33,4 +32,7 @@ default_args = {
   mds_idle_thread_stacksize = 384
   mds_idle_thread_ticks = 16
   mds_idle_thread_hooks = 0
+
+  # mds_compoent
+  mds_component_boot = true
 }

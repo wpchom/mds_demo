@@ -1,66 +1,16 @@
-target_flags = [
-  "-mcpu=cortex-m7",
-  "-mthumb",
-  "-mfloat-abi=hard",
-  "-mfpu=fpv5-sp-d16",
-]
-
-config("project_config") {
-  asmflags = target_flags + [
-               "-fmessage-length=0",
-               "-fdiagnostics-color",
-               "-fno-common",
-               "-x",
-               "assembler-with-cpp",
-             ]
-  cflags = target_flags + [
-             "-fmessage-length=0",
-             "-fdiagnostics-color",
-             "-fno-common",
-             "-ffreestanding",
-             "-fsigned-char",
-             "-ffunction-sections",
-             "-fdata-sections",
-
-             #  "-fanalyzer",
-
-             "-Wall",
-             "-Wextra",
-             "-Wnull-dereference",
-             "-Wstringop-overflow",
-             "-Wdouble-promotion",
-             "-Wshadow",
-             "-Wlogical-op",
-             "-Wredundant-decls",
-
-             "-g",
-             "-Os",
-           ]
-  ldflags = target_flags + [
-              "-nostartfiles",
-              "--specs=nano.specs",
-              "--specs=nosys.specs",
-              "-Wl,--gc-sections",
-              "-Wl,--print-memory-usage",
-              "-Wl,--no-warn-rwx-segments",
-            ]
-}
-
 executable("${project_name}") {
   sources = [ "boot_main.c" ]
 
   deps = [ "../board/:board_src" ]
 
   inputs = [ rebase_path("STM32H750XB_FLASH_BOOT.ld") ]
+  ldflags = [ "-T" + rebase_path("STM32H750XB_FLASH_BOOT.ld") ]
 
-  ldflags = [
-    "-T" + rebase_path("STM32H750XB_FLASH_BOOT.ld"),
-    "-Wl,-Map=" + rebase_path("${root_out_dir}/${target_name}.map"),
-  ]
+  ldflags += [ "-Wl,-Map=" + rebase_path("${root_out_dir}/${target_name}.map") ]
 }
 
 arm_none_eabi_action("${project_name}.dis") {
-  action = "arm-none-eabi-objdump"
+  script = "objdump"
   args = [
     "-SDFhlx",
     rebase_path("${root_out_dir}/${project_name}.elf") + " > " +
@@ -71,9 +21,10 @@ arm_none_eabi_action("${project_name}.dis") {
 }
 
 arm_none_eabi_action("${project_name}.bin") {
-  action = "arm-none-eabi-objcopy"
+  script = "objcopy"
   args = [
     "-Obinary",
+    "-R.logstr",
     rebase_path("${root_out_dir}/${project_name}.elf"),
     rebase_path("${root_out_dir}/${target_name}"),
   ]
@@ -82,9 +33,10 @@ arm_none_eabi_action("${project_name}.bin") {
 }
 
 arm_none_eabi_action("${project_name}.hex") {
-  action = "arm-none-eabi-objcopy"
+  script = "objcopy"
   args = [
     "-Oihex",
+    "-R.logstr",
     rebase_path("${root_out_dir}/${project_name}.elf"),
     rebase_path("${root_out_dir}/${target_name}"),
   ]

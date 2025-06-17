@@ -2,15 +2,22 @@ pkggroup("stm32h7xx_device") {
   deps = [ ":stm32h7xx_system" ]
 }
 
-pkggroup("mds") {
-  deps = [ "driver/chip/stm32h7xx/:drv_chip_stm32h7xx" ]
+pkggroup("drv_chip_stm32h7xx") {
+}
+
+pkggroup("mds_component") {
+}
+
+pkggroup("mds_kernel") {
 }
 
 source_set("board_src") {
   sources = []
 
   public_deps = [
-    ":mds",
+    ":drv_chip_stm32h7xx",
+    ":mds_component",
+    ":mds_kernel",
     ":stm32h7xx_device",
   ]
 }

@@ -1,5 +1,5 @@
 declare_args() {
-  mds_build_dir = getenv("MDS_BUILD_DIR")
+  mds_build_dir = ""
 
   project_name = "demo_stm32h750"
   project_profile = ""

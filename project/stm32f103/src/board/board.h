@@ -8,6 +8,8 @@
 extern "C" {
 #endif
 
+#define CONFIG_BOARD_LOG_LEVEL MDS_LOG_LEVEL_WRN
+
 void BOARD_CLOCK_Init(void);
 
 #define GPIO_MODULE "gpio"

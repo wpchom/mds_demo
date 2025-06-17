@@ -1,13 +1,13 @@
 #include "mds_sys.h"
 #include "stm32h7xx.h"
-#include "SEGGER_SYSVIEW.h"
+// #include "SEGGER_SYSVIEW.h"
 
 void InitThread(MDS_Arg_t *arg)
 {
     UNUSED(arg);
 
     MDS_LOOP {
-        MDS_ThreadDelay(1000);
+        MDS_ThreadDelay(MDS_TIMEOUT_MS(1000));
     }
 }
 
@@ -15,13 +15,14 @@ int main(void)
 {
     MDS_KernelInit();
 
-    SEGGER_SYSVIEW_Conf();
+    // SEGGER_SYSVIEW_Conf();
 
     // MDS_CoreInterruptRequestRegister(SysTick_IRQn, (MDS_IsrHandler_t)MDS_SysTickIncCount, NULL);
     // MDS_CoreInterruptRequestEnable(SysTick_IRQn);
-    SysTick_Config(SystemCoreClock / MDS_SYSTICK_FREQ_HZ);
+    SysTick_Config(SystemCoreClock / CONFIG_MDS_CLOCK_TICK_FREQ_HZ);
 
-    MDS_Thread_t *thread = MDS_ThreadCreate("init", InitThread, NULL, 1024, 10, 10);
+    MDS_Thread_t *thread = MDS_ThreadCreate("init", InitThread, NULL, 1024,
+                                            MDS_THREAD_PRIORITY(10), MDS_TIMEOUT_MS(10));
     if (thread != NULL) {
         MDS_ThreadStartup(thread);
     }

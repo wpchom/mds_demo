@@ -8,6 +8,6 @@ default_args = {
 
   project_cflags = [
     "-g",
-    "-Og",
+    "-Os",
   ]
 }

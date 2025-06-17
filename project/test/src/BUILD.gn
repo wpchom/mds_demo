@@ -1,7 +1,23 @@
-executable("test") {
-  sources = [ "main.c" ]
+executable("${project_name}") {
+  sources = [
+    "main.c",
+    # "test.c",
+  ]
+  include_dirs = [ "../inc" ]
+}
+
+action("${project_name}.dis") {
+  script = "${mds_build_dir}/scripts/run.py"
+  args = [
+    "objdump",
+    "-Shl",
+    rebase_path("${root_out_dir}/${project_name}.elf") + " > " +
+        rebase_path("${root_out_dir}/${target_name}"),
+  ]
+  deps = [ ":${project_name}" ]
+  outputs = [ "${root_out_dir}/${target_name}" ]
 }
 
 group("default") {
-  deps = [ ":test" ]
+  deps = [ ":${project_name}.dis" ]
 }

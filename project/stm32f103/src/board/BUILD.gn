@@ -5,7 +5,7 @@ pkggroup("stm32f1xx_device") {
 pkggroup("drv_chip_stm32f1xx") {
 }
 
-pkggroup("mds_component/lpc") {
+pkggroup("mds_component") {
 }
 
 source_set("board_src") {
@@ -16,7 +16,7 @@ source_set("board_src") {
 
   public_deps = [
     ":drv_chip_stm32f1xx",
-    ":mds_component/lpc",
+    ":mds_component",
     ":stm32f1xx_device",
   ]
 }

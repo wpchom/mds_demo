@@ -1,5 +1,7 @@
 #include "board.h"
 
+MDS_LOG_MODULE_DECLARE(board, CONFIG_BOARD_LOG_LEVEL);
+
 #define BOARD_LPC_SLEEP_THRESHOLD 300
 #define BOARD_LPC_SLEEP_MIN       10
 
@@ -66,7 +68,8 @@ static MDS_LPC_Run_t BOARD_LPC_Run(MDS_LPC_Run_t run)
     RCC_OscInitStruct.HSIState = RCC_HSI_ON;
     RCC_OscInitStruct.HSICalibrationValue = RCC_HSICALIBRATION_DEFAULT;
 
-    RCC_ClkInitStruct.ClockType = RCC_CLOCKTYPE_HCLK | RCC_CLOCKTYPE_SYSCLK | RCC_CLOCKTYPE_PCLK1 | RCC_CLOCKTYPE_PCLK2;
+    RCC_ClkInitStruct.ClockType = RCC_CLOCKTYPE_HCLK | RCC_CLOCKTYPE_SYSCLK | RCC_CLOCKTYPE_PCLK1 |
+                                  RCC_CLOCKTYPE_PCLK2;
     RCC_ClkInitStruct.SYSCLKSource = RCC_SYSCLKSOURCE_PLLCLK;
 
     HAL_RCC_DisableCSS();
@@ -121,7 +124,7 @@ void BOARD_CLOCK_Init(void)
 {
     HAL_Init();
 
-    SysTick_Config(SystemCoreClock / MDS_CLOCK_TICK_FREQ_HZ);
+    SysTick_Config(SystemCoreClock / CONFIG_MDS_CLOCK_TICK_FREQ_HZ);
 
     MDS_LPC_Init(&G_LPC_OPS, BOARD_LPC_SLEEP_THRESHOLD, MDS_LPC_SLEEP_IDLE, MDS_LPC_RUN_LOW);
 
@@ -138,5 +141,5 @@ void BOARD_CLOCK_Init(void)
 
 void SysTick_Handler(void)
 {
-    MDS_ClockIncTickCount();
+    MDS_SysTickHandler();
 }

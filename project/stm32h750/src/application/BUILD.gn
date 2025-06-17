@@ -1,10 +1,7 @@
 executable("${project_name}") {
   sources = [ "app_main.c" ]
 
-  deps = [
-    ":mds",
-    "../board/:board_src",
-  ]
+  deps = [ "../board/:board_src" ]
 
   inputs = [ rebase_path("STM32H750XB_FLASH.ld") ]
 
@@ -15,9 +12,9 @@ executable("${project_name}") {
 }
 
 arm_none_eabi_action("${project_name}.dis") {
-  action = "arm-none-eabi-objdump"
+  script = "objdump"
   args = [
-    "-SFhlx",
+    "-SDFhlx",
     rebase_path("${root_out_dir}/${project_name}.elf") + " > " +
         rebase_path("${root_out_dir}/${target_name}"),
   ]
@@ -26,11 +23,10 @@ arm_none_eabi_action("${project_name}.dis") {
 }
 
 arm_none_eabi_action("${project_name}.bin") {
-  action = "arm-none-eabi-objcopy"
+  script = "objcopy"
   args = [
     "-Obinary",
-    "-R",
-    ".logstr",
+    "-R.logstr",
     rebase_path("${root_out_dir}/${project_name}.elf"),
     rebase_path("${root_out_dir}/${target_name}"),
   ]
@@ -39,11 +35,10 @@ arm_none_eabi_action("${project_name}.bin") {
 }
 
 arm_none_eabi_action("${project_name}.hex") {
-  action = "arm-none-eabi-objcopy"
+  script = "objcopy"
   args = [
     "-Oihex",
-    "-R",
-    ".logstr",
+    "-R.logstr",
     rebase_path("${root_out_dir}/${project_name}.elf"),
     rebase_path("${root_out_dir}/${target_name}"),
   ]
@@ -52,11 +47,10 @@ arm_none_eabi_action("${project_name}.hex") {
 }
 
 arm_none_eabi_action("${project_name}.logstr") {
-  action = "arm-none-eabi-objcopy"
+  script = "objcopy"
   args = [
     "-Obinary",
-    "-j",
-    ".logstr",
+    "-j.logstr",
     rebase_path("${root_out_dir}/${project_name}.elf"),
     rebase_path("${root_out_dir}/${target_name}"),
   ]

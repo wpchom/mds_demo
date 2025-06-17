@@ -72,7 +72,7 @@ SECTIONS
         *(.rdata)
         *(.rodata .rodata.*)
         *(.srodata .srodata.*)
-        *(.logstr .logstr.*)
+        *(.logfmt .logfmt.*)
 
         . = ALIGN(4);
     } > FLASH

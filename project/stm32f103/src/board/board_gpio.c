@@ -1,6 +1,8 @@
 #include "drv_gpio.h"
 #include "board.h"
 
+MDS_LOG_MODULE_DECLARE(board, CONFIG_BOARD_LOG_LEVEL);
+
 static const struct GPIO_Desc {
     DEV_GPIO_Object_t object;
     DEV_GPIO_Config_t config;
@@ -24,7 +26,7 @@ void BOARD_GPIO_Init(void)
 
     MDS_Err_t err = DEV_GPIO_ModuleInit(&g_moduleGPIO, GPIO_MODULE, &G_DRV_STM32F1XX_GPIO, NULL, NULL);
     if (err != MDS_EOK) {
-        MDS_LOG_E("[BRD_GPIO] DEV_GPIO_ModuleInit fail, err:%d", err);
+        // MDS_LOG_E("[BRD_GPIO] DEV_GPIO_ModuleInit fail, err:%d", err);
         return;
     }
 
