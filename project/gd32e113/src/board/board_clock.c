@@ -3,6 +3,8 @@
 #include "drv_rcu.h"
 #include "drv_rtc.h"
 
+MDS_LOG_MODULE_DEFINE(board, MDS_LOG_LEVEL_INF);
+
 #define BOARD_LPC_SLEEP_THRESHOLD 300
 #define BOARD_LPC_SLEEP_MIN       10
 
@@ -46,7 +48,8 @@ static MDS_Err_t BOARD_LPC_HighRun(void)
     }
 
     DRV_RCU_ClockInit_t clkInitStruct = {
-        .ClockType = RCU_CLOCKTYPE_SYSCLK | RCU_CLOCKTYPE_HCLK | RCU_CLOCKTYPE_PCLK1 | RCU_CLOCKTYPE_PCLK2,
+        .ClockType = RCU_CLOCKTYPE_SYSCLK | RCU_CLOCKTYPE_HCLK | RCU_CLOCKTYPE_PCLK1 |
+                     RCU_CLOCKTYPE_PCLK2,
         .SYSCLKSource = RCU_CKSYSSRC_PLL,
         .AHBCLKDivider = RCU_AHB_CKSYS_DIV1,
         .APB1CLKDivider = RCU_APB1_CKAHB_DIV1,
@@ -64,7 +67,8 @@ static MDS_Err_t BOARD_LPC_HighRun(void)
 static MDS_Err_t BOARD_LPC_LowRun(void)
 {
     DRV_RCU_ClockInit_t clkInitStruct = {
-        .ClockType = RCU_CLOCKTYPE_SYSCLK | RCU_CLOCKTYPE_HCLK | RCU_CLOCKTYPE_PCLK1 | RCU_CLOCKTYPE_PCLK2,
+        .ClockType = RCU_CLOCKTYPE_SYSCLK | RCU_CLOCKTYPE_HCLK | RCU_CLOCKTYPE_PCLK1 |
+                     RCU_CLOCKTYPE_PCLK2,
         .SYSCLKSource = RCU_CKSYSSRC_IRC8M,
         .AHBCLKDivider = RCU_AHB_CKSYS_DIV1,
         .APB1CLKDivider = RCU_APB1_CKAHB_DIV1,
@@ -168,7 +172,7 @@ void BOARD_CLOCK_Init(void)
     DRV_RCU_RTCClockEnable();
 
     static const DRV_RTC_InitStruct_t init = {
-        .prescale = (IRC40K_VALUE / MDS_CLOCK_TICK_FREQ_HZ) - 1,
+        .prescale = (IRC40K_VALUE / CONFIG_MDS_CLOCK_TICK_FREQ_HZ) - 1,
     };
 
     DRV_RTC_Init(&hrtc, &init);

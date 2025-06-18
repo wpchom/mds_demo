@@ -2,6 +2,8 @@
 #include "drv_flash.h"
 #include "public_file.h"
 
+MDS_LOG_MODULE_DECLARE(board, MDS_LOG_LEVEL_INF);
+
 static DEV_STORAGE_Adaptr_t g_flashAdaptr;
 static DEV_STORAGE_Periph_t g_flashNV;
 static DEV_STORAGE_Periph_t g_flashUV;

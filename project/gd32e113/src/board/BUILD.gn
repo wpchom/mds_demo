@@ -1,7 +1,7 @@
 pkggroup("drv_chip_gd32e11x") {
 }
 
-pkggroup("mds_component/lpc") {
+pkggroup("mds_component") {
 }
 
 config("board_inc") {
@@ -22,6 +22,6 @@ source_set("board_src") {
 
   public_deps = [
     ":drv_chip_gd32e11x",
-    ":mds_component/lpc",
+    ":mds_component",
   ]
 }

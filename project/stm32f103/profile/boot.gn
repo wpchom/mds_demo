@@ -7,7 +7,7 @@ default_args = {
 
   import("//profile/common.gni")
 
-  # mds
+  # mds_kernel
   mds_tick_u64 = false
   mds_library_miniable = true
   mds_object_name_size = 7
@@ -36,7 +36,6 @@ default_args = {
   # mds_component
   mds_component_algo = true
   mds_component_boot = true
-  mds_component_lpc = false
 
   # mds_component_boot
   mds_boot_upgrade_retry = 3

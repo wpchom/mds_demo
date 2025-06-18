@@ -1,7 +1,4 @@
-pkggroup("mds_component/fs") {
-}
-
-pkggroup("mds_component/emfs") {
+pkggroup("mds_component") {
 }
 
 config("public_board_config") {
@@ -15,8 +12,5 @@ source_set("public_board") {
 
   public_configs = [ ":public_board_config" ]
 
-  public_deps = [
-    ":mds_component/emfs",
-    ":mds_component/fs",
-  ]
+  public_deps = [ ":mds_component" ]
 }

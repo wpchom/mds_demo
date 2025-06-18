@@ -3,7 +3,7 @@ script_executable = "python3"
 
 default_args = {
   project_name = "demo_stm32f103"
-  project_profile = "app"
+  project_profile = "apps"
 
   import("//profile/common.gni")
 

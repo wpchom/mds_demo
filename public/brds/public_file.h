@@ -1,8 +1,8 @@
 #ifndef __PUBLIC_FILE_H__
 #define __PUBLIC_FILE_H__
 
-#include "mds_fs.h"
-#include "mds_emfs.h"
+#include "fs/mds_fs.h"
+#include "fs/mds_emfs.h"
 
 #ifdef __cplusplus
 extern "C" {
