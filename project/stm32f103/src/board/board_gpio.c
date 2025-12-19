@@ -25,8 +25,8 @@ void BOARD_GPIO_Init(void)
     NVIC_EnableIRQ(EXTI2_IRQn);
 
     MDS_Err_t err = DEV_GPIO_ModuleInit(&g_moduleGPIO, GPIO_MODULE, &G_DRV_STM32F1XX_GPIO, NULL, NULL);
-    if (err != MDS_EOK) {
-        // MDS_LOG_E("[BRD_GPIO] DEV_GPIO_ModuleInit fail, err:%d", err);
+    if (!MDS_ErrIsSame(err, MDS_EOK)) {
+        // MDS_LOG_E("[BRD_GPIO] DEV_GPIO_ModuleInit fail, err:%d", err.errno);
         return;
     }
 
@@ -36,8 +36,8 @@ void BOARD_GPIO_Init(void)
         g_pin[idx].object.initVal = G_GPIO_DESC[idx].object.initVal;
 
         err = DEV_GPIO_PinInit(&(g_pin[idx]), (const char *)G_GPIO_DESC[idx].object.parent, &g_moduleGPIO);
-        if (err != MDS_EOK) {
-            MDS_LOG_E("[BRD_GPIO] DEV_GPIO_PinInit fail, err:%d", err);
+        if (!MDS_ErrIsSame(err, MDS_EOK)) {
+            MDS_LOG_E("[BRD_GPIO] DEV_GPIO_PinInit fail, err:%d", err.errno);
         } else {
             DEV_GPIO_PinConfig(&(g_pin[idx]), &(G_GPIO_DESC[idx].config));
         }

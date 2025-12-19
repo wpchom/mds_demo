@@ -1,7 +1,17 @@
+pkggroup("stm32h7xx_device") {
+  deps = [ "system_stm32h7xx" ]
+}
+
+pkggroup("drv_chip_stm32h7xx") {
+}
+
 executable("${project_name}") {
   sources = [ "boot_main.c" ]
 
-  deps = [ "../board/:board_src" ]
+  deps = [
+    ":drv_chip_stm32h7xx",
+    ":stm32h7xx_device",
+  ]
 
   inputs = [ rebase_path("STM32H750XB_FLASH_BOOT.ld") ]
   ldflags = [ "-T" + rebase_path("STM32H750XB_FLASH_BOOT.ld") ]
@@ -12,9 +22,10 @@ executable("${project_name}") {
 arm_none_eabi_action("${project_name}.dis") {
   script = "objdump"
   args = [
-    "-SDFhlx",
-    rebase_path("${root_out_dir}/${project_name}.elf") + " > " +
-        rebase_path("${root_out_dir}/${target_name}"),
+    "-SFhlx",
+    rebase_path("${root_out_dir}/${project_name}.elf"),
+    ">",
+    rebase_path("${root_out_dir}/${target_name}"),
   ]
   deps = [ ":${project_name}" ]
   outputs = [ "${root_out_dir}/${target_name}" ]

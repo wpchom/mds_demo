@@ -16,9 +16,10 @@ MEMORY
     RAM_BKP (rw)    : ORIGIN = 0x38800000, LENGTH = 4K
 }
 
-__STACK_SIZE = 0x600;
-__STACK_LOCAL = ORIGIN(DTCM) + LENGTH(DTCM) - __STACK_SIZE;
+__STACK_SIZE = 0x4000;
+__STACK_BASE = ORIGIN(DTCM) + LENGTH(DTCM) - __STACK_SIZE;
 __HEAP_SIZE = __StackLimit - __HeapBase;
+__APP_VECT_ADDRESS = ORIGIN(APP);
 
 /* Linker script to place sections and symbol values. Should be used together
  * with other linker script that defines memory regions FLASH and RAM.
@@ -33,7 +34,6 @@ SECTIONS
         . = ALIGN(4);
 
         *(.logstr .logstr.*)
-        *(.rodata.__FUNCTION__ .rodata.__FUNCTION__.*)
 
         . = ALIGN(4);
     } > LOGSTR
@@ -124,6 +124,7 @@ SECTIONS
     .data : {
         . = ALIGN(4);
         PROVIDE ( __data_start = . );
+        PROVIDE ( _sdata = . );
 
         *(.data .data.*)
         *(.sdata .sdata.*)
@@ -131,15 +132,18 @@ SECTIONS
 
         . = ALIGN(4);
         PROVIDE ( __data_end = . );
+        PROVIDE ( edata = . );
     } > ITCM AT > FLASH
     PROVIDE ( __edata = __data_end );
     PROVIDE ( _edata = __data_end );
-    PROVIDE ( edata = __data_end );
+    PROVIDE ( _sidata = LOADADDR(.data) );
+
 
     .bss (NOLOAD) : {
         . = ALIGN(4);
         PROVIDE ( __bss_start = . );
         PROVIDE ( __bss_start__ = . );
+        PROVIDE ( _sbss = . );
 
         *(.bss .bss.*)
         *(.sbss .sbss.*)
@@ -148,7 +152,9 @@ SECTIONS
         . = ALIGN(4);
         PROVIDE ( __bss_end = . );
         PROVIDE ( __bss_end__ = . );
+        PROVIDE ( _ebss = . );
     } > DTCM
+    PROVIDE ( __end__ = __bss_end);
     PROVIDE ( __end = __bss_end );
     PROVIDE ( _end = __bss_end );
     PROVIDE ( end = __bss_end );
@@ -163,7 +169,7 @@ SECTIONS
         PROVIDE ( __HeapLimit = . );
     } > DTCM
 
-    .stack (__STACK_LOCAL) (NOLOAD) : {
+    .stack (__STACK_BASE) (NOLOAD) : {
         . = ALIGN(8);
         PROVIDE ( __StackLimit = . );
 

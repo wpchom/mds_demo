@@ -42,7 +42,7 @@ static MDS_Err_t BOARD_LPC_HighRun(void)
     oscInitStruct.PLL.PLLMUL = RCU_PLL_MUL24;  // 8 / 2 * 24 = 96M
 
     MDS_Err_t err = DRV_RCU_OscConfig(&oscInitStruct);
-    if (err != MDS_EOK) {
+    if (!MDS_ErrIsSame(err, MDS_EOK)) {
         MDS_LOG_E("[BOARD_LPC_HighRun] osc config err:%d", err);
         return (err);
     }
@@ -57,7 +57,7 @@ static MDS_Err_t BOARD_LPC_HighRun(void)
     };
 
     err = DRV_RCU_ClockConfig(&clkInitStruct);
-    if (err != MDS_EOK) {
+    if (!MDS_ErrIsSame(err, MDS_EOK)) {
         MDS_LOG_E("[BOARD_LPG_HighRun] clock config err:%d", err);
     }
 
@@ -76,7 +76,7 @@ static MDS_Err_t BOARD_LPC_LowRun(void)
     };
 
     MDS_Err_t err = DRV_RCU_ClockConfig(&clkInitStruct);
-    if (err != MDS_EOK) {
+    if (!MDS_ErrIsSame(err, MDS_EOK)) {
         MDS_LOG_E("[BOARD_LPD_LowRun] clock config err:%d", err);
         return (err);
     }
@@ -86,7 +86,7 @@ static MDS_Err_t BOARD_LPC_LowRun(void)
     };
 
     err = DRV_RCU_PLLConfig(&pllConfig);
-    if (err != MDS_EOK) {
+    if (!MDS_ErrIsSame(err, MDS_EOK)) {
         MDS_LOG_E("[BOARD_LPD_LowRun] pll config err:%d", err);
     }
 
@@ -115,12 +115,12 @@ static MDS_Tick_t BOARD_LPC_SleepDeep(MDS_Tick_t ticksleep)
         }
 
         err = DRV_RTC_TimerAlarmStartINT(&hrtc, 0, ticksleep);
-        if (err != MDS_EOK) {
+        if (!MDS_ErrIsSame(err, MDS_EOK)) {
             break;
         }
 
         err = BOARD_LPC_LowRun();
-        if (err == MDS_EOK) {
+        if (MDS_ErrIsSame(err, MDS_EOK)) {
             SysTick->CTRL &= ~SysTick_CTRL_TICKINT_Msk;
             DRV_PMU_EnterDeepSleepMode(PMU_LDO_LOWPOWER, WFI_CMD);
             SysTick->CTRL |= SysTick_CTRL_TICKINT_Msk;
@@ -129,7 +129,7 @@ static MDS_Tick_t BOARD_LPC_SleepDeep(MDS_Tick_t ticksleep)
         DRV_RTC_AlarmTimerStop(&hrtc);
     } while (0);
 
-    if (err == MDS_EOK) {
+    if (MDS_ErrIsSame(err, MDS_EOK)) {
         sleeptick = DRV_RTC_GetTimerCount(&hrtc);
     } else {
         DRV_PMU_EnterSleepMode(WFI_CMD);

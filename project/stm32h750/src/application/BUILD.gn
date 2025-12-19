@@ -1,22 +1,35 @@
+pkggroup("stm32h7xx_device") {
+  deps = [ "system_stm32h7xx" ]
+}
+
+pkggroup("drv_chip_stm32h7xx") {
+}
+
+pkggroup("mds") {
+}
+
 executable("${project_name}") {
-  sources = [ "app_main.c" ]
+  sources = [ "apps_main.c" ]
 
-  deps = [ "../board/:board_src" ]
-
-  inputs = [ rebase_path("STM32H750XB_FLASH.ld") ]
-
-  ldflags = [
-    "-T" + rebase_path("STM32H750XB_FLASH.ld"),
-    "-Wl,-Map=" + rebase_path("${root_out_dir}/${target_name}.map"),
+  deps = [
+    ":drv_chip_stm32h7xx",
+    ":mds",
+    ":stm32h7xx_device",
   ]
+
+  inputs = [ rebase_path("STM32H750XB_FLASH_APPS.ld") ]
+  ldflags = [ "-T" + rebase_path("STM32H750XB_FLASH_APPS.ld") ]
+
+  ldflags += [ "-Wl,-Map=" + rebase_path("${root_out_dir}/${target_name}.map") ]
 }
 
 arm_none_eabi_action("${project_name}.dis") {
   script = "objdump"
   args = [
-    "-SDFhlx",
-    rebase_path("${root_out_dir}/${project_name}.elf") + " > " +
-        rebase_path("${root_out_dir}/${target_name}"),
+    "-SFhlx",
+    rebase_path("${root_out_dir}/${project_name}.elf"),
+    ">",
+    rebase_path("${root_out_dir}/${target_name}"),
   ]
   deps = [ ":${project_name}" ]
   outputs = [ "${root_out_dir}/${target_name}" ]

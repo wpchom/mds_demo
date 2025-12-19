@@ -50,7 +50,7 @@ static MDS_LPC_Run_t BOARD_LPC_GetRunMode(void)
         run = MDS_LPC_RUN_HIGH;
     } else if (sysClockFreq == 32000000) {
         run = MDS_LPC_RUN_NORMAL;
-    } else {  // HSI_VALUE
+    } else { // HSI_VALUE
         run = MDS_LPC_RUN_LOW;
     }
 
@@ -68,12 +68,12 @@ static MDS_LPC_Run_t BOARD_LPC_Run(MDS_LPC_Run_t run)
     RCC_OscInitStruct.HSIState = RCC_HSI_ON;
     RCC_OscInitStruct.HSICalibrationValue = RCC_HSICALIBRATION_DEFAULT;
 
-    RCC_ClkInitStruct.ClockType = RCC_CLOCKTYPE_HCLK | RCC_CLOCKTYPE_SYSCLK | RCC_CLOCKTYPE_PCLK1 |
-                                  RCC_CLOCKTYPE_PCLK2;
+    RCC_ClkInitStruct.ClockType =
+        RCC_CLOCKTYPE_HCLK | RCC_CLOCKTYPE_SYSCLK | RCC_CLOCKTYPE_PCLK1 | RCC_CLOCKTYPE_PCLK2;
     RCC_ClkInitStruct.SYSCLKSource = RCC_SYSCLKSOURCE_PLLCLK;
 
     HAL_RCC_DisableCSS();
-    if (run == MDS_LPC_RUN_HIGH) {  // 64MHz
+    if (run == MDS_LPC_RUN_HIGH) { // 64MHz
         RCC_OscInitStruct.PLL.PLLState = RCC_PLL_ON;
         RCC_OscInitStruct.PLL.PLLSource = RCC_PLLSOURCE_HSI_DIV2;
         RCC_OscInitStruct.PLL.PLLMUL = RCC_PLL_MUL16;
@@ -81,7 +81,7 @@ static MDS_LPC_Run_t BOARD_LPC_Run(MDS_LPC_Run_t run)
         RCC_ClkInitStruct.APB1CLKDivider = RCC_HCLK_DIV4;
         RCC_ClkInitStruct.APB2CLKDivider = RCC_HCLK_DIV4;
         FLatency = FLASH_LATENCY_2;
-    } else if (run == MDS_LPC_RUN_NORMAL) {  // 32MHz
+    } else if (run == MDS_LPC_RUN_NORMAL) { // 32MHz
         RCC_OscInitStruct.PLL.PLLState = RCC_PLL_ON;
         RCC_OscInitStruct.PLL.PLLSource = RCC_PLLSOURCE_HSI_DIV2;
         RCC_OscInitStruct.PLL.PLLMUL = RCC_PLL_MUL8;
@@ -89,7 +89,7 @@ static MDS_LPC_Run_t BOARD_LPC_Run(MDS_LPC_Run_t run)
         RCC_ClkInitStruct.APB1CLKDivider = RCC_HCLK_DIV2;
         RCC_ClkInitStruct.APB2CLKDivider = RCC_HCLK_DIV2;
         FLatency = FLASH_LATENCY_1;
-    } else {  // HSI_VALUE = 8MHz
+    } else { // HSI_VALUE = 8MHz
         RCC_OscInitStruct.PLL.PLLState = RCC_PLL_OFF;
         RCC_ClkInitStruct.SYSCLKSource = RCC_SYSCLKSOURCE_HSI;
         RCC_ClkInitStruct.AHBCLKDivider = RCC_SYSCLK_DIV1;

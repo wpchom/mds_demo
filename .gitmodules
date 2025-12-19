@@ -1,0 +1,10 @@
+[submodule "public/mds"]
+	path = public/mds
+	url = git@github.com:wpchom/mds.git
+	branch = develop
+[submodule "public/driver/drv_chip_stm32f1xx"]
+	path = public/driver/drv_chip_stm32f1xx
+	url = git@github.com:wpchom/drv_chip_stm32f1xx
+[submodule "public/driver/drv_chip_stm32h7xx"]
+	path = public/driver/drv_chip_stm32h7xx
+	url = git@github.com:wpchom/drv_chip_stm32h7xx

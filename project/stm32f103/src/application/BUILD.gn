@@ -1,20 +1,10 @@
-pkggroup("mds_kernel") {
-}
-
-pkggroup("mds_component") {
-}
-
 executable("${project_name}") {
   sources = [ "apps_main.c" ]
 
-  deps = [
-    ":mds_component",
-    ":mds_kernel",
-    "../board/:board_src",
-  ]
+  deps = [ "../board/:board_src" ]
 
-  inputs = [ rebase_path("STM32F103XB_FLASH_APP.ld") ]
-  ldflags = [ "-T" + rebase_path("STM32F103XB_FLASH_APP.ld") ]
+  inputs = [ rebase_path("STM32F103XB_FLASH_APPS.ld") ]
+  ldflags = [ "-T" + rebase_path("STM32F103XB_FLASH_APPS.ld") ]
 
   ldflags += [ "-Wl,-Map=" + rebase_path("${root_out_dir}/${target_name}.map") ]
 }
@@ -23,8 +13,9 @@ arm_none_eabi_action("${project_name}.dis") {
   script = "objdump"
   args = [
     "-SFhlx",
-    rebase_path("${root_out_dir}/${project_name}.elf") + " > " +
-        rebase_path("${root_out_dir}/${target_name}"),
+    rebase_path("${root_out_dir}/${project_name}.elf"),
+    ">",
+    rebase_path("${root_out_dir}/${target_name}"),
   ]
   deps = [ ":${project_name}" ]
   outputs = [ "${root_out_dir}/${target_name}" ]
@@ -66,33 +57,6 @@ arm_none_eabi_action("${project_name}.logstr") {
   outputs = [ "${root_out_dir}/${target_name}" ]
 }
 
-action("${project_name}.bin.lzma") {
-  script = rebase_path("${mds_build_dir}/mds.py")
-  args = [
-    "compress",
-    rebase_path("${root_out_dir}/${project_name}.bin"),
-    "-o",
-    rebase_path("${root_out_dir}/${project_name}.bin.lzma"),
-    "--format=lzma",
-    "--args=dict_size=4096,lc=1,lp=1,pb=1",
-  ]
-  deps = [ ":${project_name}.bin" ]
-  outputs = [ "${root_out_dir}/${target_name}" ]
-}
-
-action("${project_name}.upkg.bin") {
-  script = rebase_path("${mds_build_dir}/mds.py")
-  args = [
-    "upkgbin",
-    "${root_out_dir}/${project_name}.upkg.bin",  # output file
-    "-l=0x5800",  # file limit
-    "-b",
-    "${root_out_dir}/${project_name}.bin.lzma,0x08002800,0x0020",
-  ]
-  deps = [ ":${project_name}.bin.lzma" ]
-  outputs = [ "${root_out_dir}/${target_name}" ]
-}
-
 group("default") {
   deps = [
     ":${project_name}",
@@ -100,6 +64,5 @@ group("default") {
     ":${project_name}.dis",
     ":${project_name}.hex",
     ":${project_name}.logstr",
-    ":${project_name}.upkg.bin",
   ]
 }

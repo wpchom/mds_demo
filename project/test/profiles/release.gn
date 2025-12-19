@@ -1,0 +1,23 @@
+buildconfig = "//BUILDCONFIG.gn"
+script_executable = "python3"
+
+export_compile_commands = [ "*" ]
+
+default_args = {
+  # project
+  project_profile = "debug"
+  project_version = ""
+
+  # profile
+  profile_asmflags = []
+  profile_cflags = [
+    "-Os",
+    "-DNDEBUG",
+    "-Wall",
+    "-Wextra",
+  ]
+  profile_cflags_c = []
+  profile_cflags_cc = []
+  profile_arflags = []
+  profile_ldflags = []
+}

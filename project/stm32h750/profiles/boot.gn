@@ -1,0 +1,56 @@
+buildconfig = "//BUILDCONFIG.gn"
+script_executable = "python3"
+
+export_compile_commands = [ "*" ]
+
+declare_args() {
+  target_flags = [
+    "-mcpu=cortex-m7",
+    "-mthumb",
+    "-mfloat-abi=hard",
+    "-mfpu=fpv5-sp-d16",
+  ]
+}
+
+default_args = {
+  # project
+  project_profile = "boot"
+  project_version = ""
+
+  # profile
+  profile_toolchain = "arm_none_eabi_gcc"
+  profile_asmflags = target_flags + [
+                       "-x",
+                       "assembler-with-cpp",
+                     ]
+  profile_cflags = target_flags + [
+                     "-ffunction-sections",
+                     "-fdata-sections",
+                     "-ffreestanding",
+
+                     "-Wall",
+                     "-Wextra",
+                     "-Wnull-dereference",
+                     "-Wstringop-overflow",
+                     "-Wdouble-promotion",
+                     "-Wshadow",
+                     "-Wlogical-op",
+                     "-Wredundant-decls",
+
+                     "-g",
+                     "-Os",
+                   ]
+  profile_cflags_c = []
+  profile_cflags_cc = []
+  profile_arflags = []
+  profile_ldflags = target_flags + [
+                      # "--specs=nosys.specs",
+                      # "--specs=rdimon.specs",
+                      "--specs=nano.specs",
+                      "-Wl,--gc-sections",
+                      "-Wl,--print-memory-usage",
+                      "-Wl,--no-warn-rwx-segments",
+                    ]
+
+  import("//profiles/common.gni")
+}

@@ -3,16 +3,15 @@ executable("${project_name}") {
     "main.c",
     # "test.c",
   ]
-  include_dirs = [ "../inc" ]
 }
 
-action("${project_name}.dis") {
-  script = "${mds_build_dir}/scripts/run.py"
+gcc_action("${project_name}.dis") {
+  script = "objdump"
   args = [
-    "objdump",
     "-Shl",
-    rebase_path("${root_out_dir}/${project_name}.elf") + " > " +
-        rebase_path("${root_out_dir}/${target_name}"),
+    rebase_path("${root_out_dir}/${project_name}.elf"),
+    ">",
+    rebase_path("${root_out_dir}/${target_name}"),
   ]
   deps = [ ":${project_name}" ]
   outputs = [ "${root_out_dir}/${target_name}" ]

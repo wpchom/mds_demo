@@ -1,6 +1,6 @@
 #include "board.h"
-#include "boot/mds_boot.h"
-#include "mds_log.h"
+// #include "boot/mds_boot.h"
+#include "mds_sys.h"
 
 MDS_LOG_MODULE_DEFINE(board, CONFIG_BOARD_LOG_LEVEL);
 
@@ -17,11 +17,11 @@ int main(void)
 
     MDS_KernelInit();
 
-    MDS_BOOT_SwapInfo_t *swapInfo = MDS_BOOT_GetSwapInfo();
-    MDS_LOG_I("[boot] resetReaon:%lx", swapInfo->reset);
+    // MDS_BOOT_SwapInfo_t *swapInfo = MDS_BOOT_GetSwapInfo();
+    // MDS_LOG_I("[boot] resetReaon:%lx", swapInfo->reset);
 
-    MDS_Thread_t *thread = MDS_ThreadCreate("init", InitThread, NULL, 1024,
-                                            MDS_THREAD_PRIORITY(10), MDS_TIMEOUT_TICKS(10));
+    MDS_Thread_t *thread = MDS_ThreadCreate("init", InitThread, NULL, 1024, MDS_THREAD_PRIORITY(10),
+                                            MDS_TIMEOUT_TICKS(10));
     if (thread != NULL) {
         MDS_ThreadStartup(thread);
     }

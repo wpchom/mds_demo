@@ -1,8 +1,5 @@
 pkggroup("stm32f1xx_device") {
-  deps = [ ":stm32f1xx_system" ]
-}
-
-pkggroup("mds_component") {
+  deps = [ "system_stm32f1xx" ]
 }
 
 pkggroup("drv_chip_stm32f1xx") {
@@ -13,7 +10,6 @@ executable("${project_name}") {
 
   deps = [
     ":drv_chip_stm32f1xx",
-    ":mds_component",
     ":stm32f1xx_device",
   ]
 
@@ -27,8 +23,9 @@ arm_none_eabi_action("${project_name}.dis") {
   script = "objdump"
   args = [
     "-SFhlx",
-    rebase_path("${root_out_dir}/${project_name}.elf") + " > " +
-        rebase_path("${root_out_dir}/${target_name}"),
+    rebase_path("${root_out_dir}/${project_name}.elf"),
+    ">",
+    rebase_path("${root_out_dir}/${target_name}"),
   ]
   deps = [ ":${project_name}" ]
   outputs = [ "${root_out_dir}/${target_name}" ]

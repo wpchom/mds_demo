@@ -12,25 +12,25 @@ static DEV_STORAGE_Periph_t g_flashDFT;
 static void BOARD_FLASH_Init(void)
 {
     MDS_Err_t err = DEV_STORAGE_AdaptrInit(&g_flashAdaptr, FLASH_MODULE, &G_DRV_GD32E11X_FLASH, NULL, NULL);
-    if (err != MDS_EOK) {
+    if (!MDS_ErrIsSame(err, MDS_EOK)) {
         MDS_LOG_E("[flash] adaptr init failed");
         return;
     }
 
     err = DEV_STORAGE_PeriphInit(&g_flashNV, FLASH_NV, &g_flashAdaptr);
-    if (err == MDS_EOK) {
+    if (MDS_ErrIsSame(err, MDS_EOK)) {
         g_flashNV.object.baseAddr = 0x08002800;
         g_flashNV.object.sectorNums = 10 * 1024 / DRV_FLASH_PAGE_SIZE;
     }
 
     err = DEV_STORAGE_PeriphInit(&g_flashUV, FLASH_UV, &g_flashAdaptr);
-    if (err == MDS_EOK) {
+    if (MDS_ErrIsSame(err, MDS_EOK)) {
         g_flashUV.object.baseAddr = 0x08003000;
         g_flashUV.object.sectorNums = 4 * 1024 / DRV_FLASH_PAGE_SIZE;
     }
 
     err = DEV_STORAGE_PeriphInit(&g_flashDFT, FLASH_DFT, &g_flashAdaptr);
-    if (err == MDS_EOK) {
+    if (MDS_ErrIsSame(err, MDS_EOK)) {
         g_flashDFT.object.baseAddr = 0x08015000;
         g_flashDFT.object.sectorNums = 44 * 1024 / DRV_FLASH_PAGE_SIZE;
     }
@@ -52,10 +52,10 @@ const MDS_FileSystem_t *FILE_SYSTEM_DATA(void)
 
     if (emfs.init.device == NULL) {
         err = MDS_EMFS_Mount(&emfs, &init);
-        if (err != MDS_EOK) {
+        if (!MDS_ErrIsSame(err, MDS_EOK)) {
             MDS_LOG_W("[FILE_SYSTEM_DATA] emfs mount fail to mkfs");
             err = MDS_EMFS_Mkfs(init.device, init.size);
-            if (err == MDS_EOK) {
+            if (MDS_ErrIsSame(err, MDS_EOK)) {
                 err = MDS_EMFS_Mount(&emfs, &init);
             }
         }
@@ -66,7 +66,7 @@ const MDS_FileSystem_t *FILE_SYSTEM_DATA(void)
         .data = (MDS_Arg_t *)(&emfs),
     };
 
-    return ((err == MDS_EOK) ? (&fs) : (NULL));
+    return ((MDS_ErrIsSame(err, MDS_EOK)) ? (&fs) : (NULL));
 }
 
 #define PUBLIC_FILE_DEF(fileId, fileSystem, filePath, fileDesc_t)                                                      \

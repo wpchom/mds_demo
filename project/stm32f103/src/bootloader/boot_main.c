@@ -1,9 +1,12 @@
-#include "boot/mds_boot.h"
+// #include "boot/mds_boot.h"
 #include "drv_chip.h"
 #include "drv_flash.h"
 
 #define BOOT_FIRMWARE_VERSION 0x00000001U
 
+extern void __APP_VECT_ADDRESS(void);
+
+#if 0
 typedef struct BOOT_FlashDevice {
     uint32_t baseAddr;
     uint32_t pageNums;
@@ -19,7 +22,6 @@ static BOOT_FlashDevice_t g_flashDft = {
     .pageNums = 22 * 1024 / FLASH_PAGE_SIZE,
 };
 
-extern void __APP_VECT_ADDRESS(void);
 uint32_t BOOT_GetResetReason(void)
 {
     uint32_t resetReason = RCC->CSR;
@@ -61,6 +63,7 @@ const MDS_BOOT_UpgradeOps_t G_BOOT_UPGRADE_OPS = {
     .write = BOOT_FlashWrite,
     .erase = BOOT_FlashErase,
 };
+#endif
 
 int main(void)
 {
@@ -70,6 +73,7 @@ int main(void)
     SysTick_Config(SystemCoreClock / CONFIG_MDS_CLOCK_TICK_FREQ_HZ);
 #endif
 
+#if 0
     MDS_BOOT_SwapInfo_t *swapInfo = MDS_BOOT_GetSwapInfo();
     if (swapInfo != NULL) {
         swapInfo->version = BOOT_FIRMWARE_VERSION;
@@ -92,6 +96,9 @@ int main(void)
             DRV_CHIP_SystemReset();
             break;
     }
+#endif
+
+    DRV_CHIP_JumpIntoVectorAddress((uintptr_t)__APP_VECT_ADDRESS);
 }
 
 void SysTick_Handler(void)

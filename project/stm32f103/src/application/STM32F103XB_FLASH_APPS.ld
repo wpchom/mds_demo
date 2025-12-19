@@ -15,7 +15,7 @@ MEMORY
 }
 
 __STACK_SIZE = 0x400;
-__STACK_LOCAL = ORIGIN(RAM) + LENGTH(RAM) - __STACK_SIZE;
+__STACK_BASE = ORIGIN(RAM) + LENGTH(RAM) - __STACK_SIZE;
 __HEAP_SIZE = __StackLimit - __HeapBase;
 
 /* Linker script to place sections and symbol values. Should be used together
@@ -27,7 +27,15 @@ ENTRY(Reset_Handler);
 
 SECTIONS
 {
-    .vectors ORIGIN(FLASH) : {
+    .logstr : {
+        . = ALIGN(4);
+
+        *(.logstr .logstr.*)
+
+        . = ALIGN(4);
+    } > LOGSTR
+
+    .vectors : {
         KEEP ( *(.vectors .vectors.*) )
     } > FLASH
 
@@ -36,8 +44,6 @@ SECTIONS
         __text_start = .;
 
         *(.text .text.*)
-
-        KEEP ( *(SORT_BY_INIT_PRIORITY(.mds.init.*)) )
 
         KEEP ( *(SORT_BY_NAME(.init) SORT_BY_NAME(.init.*)) )
         KEEP ( *(.fini .fini.*) )
@@ -72,7 +78,7 @@ SECTIONS
         *(.rdata)
         *(.rodata .rodata.*)
         *(.srodata .srodata.*)
-        *(.logstr .logstr.*)
+        /* *(.logstr .logstr.*) */
 
         . = ALIGN(4);
     } > FLASH
@@ -112,17 +118,10 @@ SECTIONS
         PROVIDE_HIDDEN ( __zero_table_end__ = . );
     } > FLASH
 
-    .boot ORIGIN(RAM) (NOLOAD) : {
-        . = ALIGN(4);
-
-        KEEP(*(.mds.boot .mds.boot.*))
-
-        . = ALIGN(4);
-    } > RAM
-
     .data : {
         . = ALIGN(4);
         PROVIDE ( __data_start = . );
+        PROVIDE ( _sdata = . );
 
         *(.data .data.*)
         *(.sdata .sdata.*)
@@ -130,15 +129,18 @@ SECTIONS
 
         . = ALIGN(4);
         PROVIDE ( __data_end = . );
+        PROVIDE ( edata = . );
     } > RAM AT > FLASH
     PROVIDE ( __edata = __data_end );
     PROVIDE ( _edata = __data_end );
-    PROVIDE ( edata = __data_end );
+    PROVIDE ( _sidata = LOADADDR(.data) );
 
-    .bss : {
+
+    .bss (NOLOAD) : {
         . = ALIGN(4);
         PROVIDE ( __bss_start = . );
         PROVIDE ( __bss_start__ = . );
+        PROVIDE ( _sbss = . );
 
         *(.bss .bss.*)
         *(.sbss .sbss.*)
@@ -147,7 +149,9 @@ SECTIONS
         . = ALIGN(4);
         PROVIDE ( __bss_end = . );
         PROVIDE ( __bss_end__ = . );
-    } > RAM AT > RAM
+        PROVIDE ( _ebss = . );
+    } > RAM
+    PROVIDE ( __end__ = __bss_end);
     PROVIDE ( __end = __bss_end );
     PROVIDE ( _end = __bss_end );
     PROVIDE ( end = __bss_end );
@@ -162,7 +166,7 @@ SECTIONS
         PROVIDE ( __HeapLimit = . );
     } > RAM
 
-    .stack (__STACK_LOCAL) (NOLOAD) : {
+    .stack (__STACK_BASE) (NOLOAD) : {
         . = ALIGN(8);
         PROVIDE ( __StackLimit = . );
 
@@ -173,21 +177,3 @@ SECTIONS
         PROVIDE ( __stack = . );
     } > RAM
 }
-
-/* Alias */
-memset = MDS_MemBuffSet;
-memcpy = MDS_MemBuffCpy;
-memccpy = MDS_MemBuffCcpy;
-memcmp = MDS_MemBuffCmp;
-
-strtoull = MDS_Strtoull;
-strtoll = MDS_Strtoll;
-strtoul = MDS_Strtoul;
-strtol = MDS_Strtol;
-
-vsnprintf = MDS_Vsnprintf;
-snprintf = MDS_Snprintf;
-vsprintf = MDS_Vsprintf;
-sprintf = MDS_Sprintf;
-vsscanf = MDS_Vsscanf;
-sscanf = MDS_Sscanf;

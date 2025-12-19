@@ -1,0 +1,15 @@
+# package
+
+# stm32h7xx_deivce
+stm32h7xx_device_devdef = "STM32H750xx"
+
+# stm32h7xx_hal_driver
+stm32h7xx_hal_driver_confdir = rebase_path("//src/board")
+
+# drv_chip_stm32h7xx
+drv_chip_stm32h7xx_pkgpth =
+    rebase_path("//../../public/driver/drv_chip_stm32h7xx")
+
+# mds
+mds_pkgpth = rebase_path("//../../public/mds")
+mds_core_arch = "cortex-m/thumbv7em"
