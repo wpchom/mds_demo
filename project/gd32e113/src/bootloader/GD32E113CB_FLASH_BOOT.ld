@@ -1,6 +1,6 @@
 /******************************************************************************
- * @file     GD32E113CB_FLASH_BOOT.ld
- * @brief    128KB-FLASH 32KB-RAM GD32E113CB bootloader linker script
+ * @file     startup_memory.ld
+ * @brief    Linker Script for Cortex-M based device
  ******************************************************************************/
 
 MEMORY
@@ -16,9 +16,10 @@ MEMORY
     RAM     (rwx)   : ORIGIN = 0x20000000, LENGTH = 32K
 }
 
-__STACK_SIZE = 0x200;
-__STACK_LOCAL = ORIGIN(RAM) + LENGTH(RAM) - __STACK_SIZE;
-JUMP_APP_ADDRESS = ORIGIN(APP);
+__STACK_SIZE = 0x400;
+__STACK_BASE = ORIGIN(RAM) + LENGTH(RAM) - __STACK_SIZE;
+__HEAP_SIZE = __StackLimit - __HeapBase;
+__APP_VECT_ADDRESS = ORIGIN(APP);
 
 /* Linker script to place sections and symbol values. Should be used together
  * with other linker script that defines memory regions FLASH and RAM.
@@ -29,6 +30,14 @@ ENTRY(Reset_Handler);
 
 SECTIONS
 {
+    .logstr : {
+        . = ALIGN(4);
+
+        *(.logstr .logstr.*)
+
+        . = ALIGN(4);
+    } > LOGSTR
+
     .vectors : {
         KEEP ( *(.vectors .vectors.*) )
     } > FLASH
@@ -112,17 +121,10 @@ SECTIONS
         PROVIDE_HIDDEN ( __zero_table_end__ = . );
     } > FLASH
 
-    .boot ORIGIN(RAM) (NOLOAD) : {
-        . = ALIGN(4);
-
-        KEEP(*(.mds.boot .mds.boot.*))
-
-        . = ALIGN(4);
-    } > RAM
-
     .data : {
         . = ALIGN(4);
         PROVIDE ( __data_start = . );
+        PROVIDE ( _sdata = . );
 
         *(.data .data.*)
         *(.sdata .sdata.*)
@@ -130,15 +132,18 @@ SECTIONS
 
         . = ALIGN(4);
         PROVIDE ( __data_end = . );
+        PROVIDE ( edata = . );
     } > RAM AT > FLASH
     PROVIDE ( __edata = __data_end );
     PROVIDE ( _edata = __data_end );
-    PROVIDE ( edata = __data_end );
+    PROVIDE ( _sidata = LOADADDR(.data) );
+
 
     .bss (NOLOAD) : {
         . = ALIGN(4);
         PROVIDE ( __bss_start = . );
         PROVIDE ( __bss_start__ = . );
+        PROVIDE ( _sbss = . );
 
         *(.bss .bss.*)
         *(.sbss .sbss.*)
@@ -147,7 +152,9 @@ SECTIONS
         . = ALIGN(4);
         PROVIDE ( __bss_end = . );
         PROVIDE ( __bss_end__ = . );
+        PROVIDE ( _ebss = . );
     } > RAM
+    PROVIDE ( __end__ = __bss_end);
     PROVIDE ( __end = __bss_end );
     PROVIDE ( _end = __bss_end );
     PROVIDE ( end = __bss_end );
@@ -156,13 +163,13 @@ SECTIONS
         . = ALIGN(8);
         PROVIDE ( __HeapBase = . );
 
-        *(.heap .heap.*)
+        . += __HEAP_SIZE;
 
         . = ALIGN(8);
         PROVIDE ( __HeapLimit = . );
     } > RAM
 
-    .stack (__STACK_LOCAL) (NOLOAD) : {
+    .stack (__STACK_BASE) (NOLOAD) : {
         . = ALIGN(8);
         PROVIDE ( __StackLimit = . );
 
@@ -173,21 +180,3 @@ SECTIONS
         PROVIDE ( __stack = . );
     } > RAM
 }
-
-/* Alias */
-memset = MDS_MemBuffSet;
-memcpy = MDS_MemBuffCpy;
-memccpy = MDS_MemBuffCcpy;
-memcmp = MDS_MemBuffCmp;
-
-strtoull = MDS_Strtoull;
-strtoll = MDS_Strtoll;
-strtoul = MDS_Strtoul;
-strtol = MDS_Strtol;
-
-vsnprintf = MDS_Vsnprintf;
-snprintf = MDS_Snprintf;
-vsprintf = MDS_Vsprintf;
-sprintf = MDS_Sprintf;
-vsscanf = MDS_Vsscanf;
-sscanf = MDS_Sscanf;

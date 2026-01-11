@@ -5,11 +5,15 @@ pkggroup("stm32f1xx_device") {
 pkggroup("drv_chip_stm32f1xx") {
 }
 
+pkggroup("mds") {
+}
+
 executable("${project_name}") {
   sources = [ "boot_main.c" ]
 
   deps = [
     ":drv_chip_stm32f1xx",
+    ":mds",
     ":stm32f1xx_device",
   ]
 

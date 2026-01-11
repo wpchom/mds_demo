@@ -6,20 +6,26 @@
 MEMORY
 {
     LOGSTR  (r)     : ORIGIN = 0xFF000000, LENGTH = 16M
-    FLASH   (rx)    : ORIGIN = 0x08000000, LENGTH = 128K
+    FLASH   (rx)    : ORIGIN = 0x08000000, LENGTH = 0x3C0000 /* 3840K */
 
-    ITCM    (rwx)   : ORIGIN = 0x00000000, LENGTH = 64K
-    DTCM    (rwx)   : ORIGIN = 0x20000000, LENGTH = 128K
+    ITCM    (rwx)   : ORIGIN = 0x00000000, LENGTH = 0x80000 /* 512K */
+    DTCM    (rwx)   : ORIGIN = 0x20000000, LENGTH = 0x80000 /* 512K */
+
+    SRAM    (rwx)   : ORIGIN = 0x24000000, LENGTH = 512K
+
     RAM_D1  (rwx)   : ORIGIN = 0x24000000, LENGTH = 512K
     RAM_D2  (rwx)   : ORIGIN = 0x30000000, LENGTH = 288K
     RAM_D3  (rwx)   : ORIGIN = 0x38000000, LENGTH = 64K
-    RAM_BKP (rw)    : ORIGIN = 0x38800000, LENGTH = 4K
+
+    RAM_BKP (rw)    : ORIGIN = 0x38800000, LENGTH = 0x1000 /* 4K */
 }
 
 __STACK_SIZE = 0x4000;
 __STACK_BASE = ORIGIN(DTCM) + LENGTH(DTCM) - __STACK_SIZE;
 __HEAP_SIZE = __StackLimit - __HeapBase;
-/* __APP_VECT_ADDRESS = ORIGIN(APP); */
+
+/* __OSPI0_ADDRESS = 0x90000000; */
+/* __OSPI1_ADDRESS = 0x70000000; */
 
 /* Linker script to place sections and symbol values. Should be used together
  * with other linker script that defines memory regions FLASH and RAM.
@@ -30,7 +36,7 @@ ENTRY(Reset_Handler);
 
 SECTIONS
 {
-    .logstr (NOLOAD) : {
+    .logstr : {
         . = ALIGN(4);
 
         *(.logstr .logstr.*)

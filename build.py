@@ -68,7 +68,7 @@ def main():
         build_cmd += ["-o", os.path.join(os.getcwd(), "outdir", args.project, p)]
         build_cmd += unkonw_args
 
-        ret = subprocess.run(build_cmd, check=True)
+        ret = subprocess.run(build_cmd)
 
         if ret.returncode != 0:
             exit(ret)

@@ -1,0 +1,12 @@
+# package
+
+# arm_none_eabi_gcc
+xpack_arm_none_eabi_gcc_pkgver = "14.2.1-1.1"
+
+# drv_chip_gd32e11x
+drv_chip_gd32e11x_pkgpth =
+    rebase_path("//../../public/driver/drv_chip_gd32e11x")
+
+# mds
+mds_pkgpth = rebase_path("//../../public/mds")
+mds_core_arch = "cortex-m/thumbv7em"

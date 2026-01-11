@@ -5,20 +5,19 @@ export_compile_commands = [ "*" ]
 
 declare_args() {
   target_flags = [
-    "-mcpu=cortex-m7",
+    "-mcpu=cortex-m3",
     "-mthumb",
-    "-mfloat-abi=hard",
-    "-mfpu=fpv5-sp-d16",
+    "-mfloat-abi=soft",
   ]
 }
 
 default_args = {
   # project
-  project_profile = "apps"
+  project_profile = "boot"
   project_version = ""
 
   # profile
-  profile_toolchain = "arm_none_eabi_gcc"
+  profile_toolchain = "xpack_arm_none_eabi_gcc"
   profile_asmflags = target_flags + [
                        "-x",
                        "assembler-with-cpp",
@@ -26,7 +25,8 @@ default_args = {
   profile_cflags = target_flags + [
                      "-ffunction-sections",
                      "-fdata-sections",
-                     "-ffreestanding",
+
+                     #  "-ffreestanding",
 
                      "-Wall",
                      "-Wextra",
@@ -38,7 +38,7 @@ default_args = {
                      "-Wredundant-decls",
 
                      "-g",
-                     "-Os",
+                     "-O2",
                    ]
   profile_cflags_c = []
   profile_cflags_cc = []
@@ -54,4 +54,11 @@ default_args = {
                     ]
 
   import("//profiles/common.gni")
+
+  # gd32e113
+  drv_chip_without_irq = true
+
+  # mds
+  mds_with_nosys = true
+  mds_log_enable = false
 }

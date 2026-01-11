@@ -8,3 +8,12 @@
 [submodule "public/driver/drv_chip_stm32h7xx"]
 	path = public/driver/drv_chip_stm32h7xx
 	url = git@github.com:wpchom/drv_chip_stm32h7xx
+[submodule "public/driver/drv_chip_gd32h7xx"]
+	path = public/driver/drv_chip_gd32h7xx
+	url = git@github.com:wpchom/drv_chip_gd32h7xx
+[submodule "public/driver/drv_chip_gd32e11x"]
+	path = public/driver/drv_chip_gd32e11x
+	url = git@github.com:wpchom/drv_chip_gd32e11x
+[submodule "public/driver/drv_simulate"]
+	path = public/driver/drv_simulate
+	url = git@github.com:wpchom/drv_simulate

@@ -1,7 +1,0 @@
-# package
-
-# mds_kernel
-mds_config_core = "cortex-m/thumbv7em"
-
-# gd32e11x_firmware
-

@@ -18,7 +18,7 @@ default_args = {
   project_version = ""
 
   # profile
-  profile_toolchain = "arm_none_eabi_gcc"
+  profile_toolchain = "xpack_arm_none_eabi_gcc"
   profile_asmflags = target_flags + [
                        "-x",
                        "assembler-with-cpp",
@@ -47,6 +47,7 @@ default_args = {
                       # "--specs=nosys.specs",
                       # "--specs=rdimon.specs",
                       "--specs=nano.specs",
+                      "-nostartfiles",
                       "-Wl,--gc-sections",
                       "-Wl,--print-memory-usage",
                       "-Wl,--no-warn-rwx-segments",

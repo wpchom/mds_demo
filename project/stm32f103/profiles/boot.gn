@@ -46,6 +46,7 @@ default_args = {
                       # "--specs=nosys.specs",
                       # "--specs=rdimon.specs",
                       "--specs=nano.specs",
+                      "-nostartfiles",
                       "-Wl,--gc-sections",
                       "-Wl,--print-memory-usage",
                       "-Wl,--no-warn-rwx-segments",
@@ -55,4 +56,5 @@ default_args = {
 
   # mds
   mds_with_nosys = true
+  mds_log_enable = false
 }

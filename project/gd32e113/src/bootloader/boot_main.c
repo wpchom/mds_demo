@@ -1,6 +1,6 @@
-#include "boot/mds_boot.h"
 #include "drv_chip.h"
 #include "drv_flash.h"
+#include "boot/mds_boot.h"
 
 #define BOOT_FIRMWARE_VERSION 0x00000001U
 
@@ -28,31 +28,31 @@ uint32_t BOOT_GetResetReason(void)
     return (resetReason);
 }
 
-static int BOOT_FlashRead(MDS_BOOT_Device_t *dev, uintptr_t ofs, uint8_t *data, size_t len)
+static size_t BOOT_FlashRead(MDS_BOOT_Device_t *dev, uintptr_t ofs, uint8_t *data, size_t len)
 {
     BOOT_FlashDevice_t *flashDev = (BOOT_FlashDevice_t *)dev;
 
-    MDS_MemBuffCopy(data, len, (void *)(flashDev->baseAddr + ofs), len);
+    memcpy(data, (void *)(flashDev->baseAddr + ofs), len);
 
-    return (0);
+    return (len);
 }
 
-static int BOOT_FlashWrite(MDS_BOOT_Device_t *dev, uintptr_t ofs, const uint8_t *data, size_t len)
+static size_t BOOT_FlashWrite(MDS_BOOT_Device_t *dev, uintptr_t ofs, const uint8_t *data, size_t len)
 {
     BOOT_FlashDevice_t *flashDev = (BOOT_FlashDevice_t *)dev;
 
     MDS_Err_t err = DRV_FLASH_Program(flashDev->baseAddr + ofs, data, len, NULL);
 
-    return (err);
+    return ((MDS_ErrIsSame(err, MDS_EOK)) ? len : 0);
 }
 
-static int BOOT_FlashErase(MDS_BOOT_Device_t *dev)
+static size_t BOOT_FlashErase(MDS_BOOT_Device_t *dev)
 {
     BOOT_FlashDevice_t *flashDev = (BOOT_FlashDevice_t *)dev;
 
     MDS_Err_t err = DRV_FLASH_Erase(flashDev->baseAddr, flashDev->pageNums, NULL);
 
-    return (err);
+     return ((MDS_ErrIsSame(err, MDS_EOK)) ? flashDev->pageNums : 0);
 }
 
 const MDS_BOOT_UpgradeOps_t G_BOOT_UPGRADE_OPS = {
@@ -63,7 +63,7 @@ const MDS_BOOT_UpgradeOps_t G_BOOT_UPGRADE_OPS = {
 
 int main(void)
 {
-    extern void JUMP_APP_ADDRESS(void);
+    extern void __APP_VECT_ADDRESS(void);
 
 #if (defined(CONFIG_MDS_CLOCK_TICK_FREQ_HZ) && (CONFIG_MDS_CLOCK_TICK_FREQ_HZ > 0))
     SysTick_Config(SystemCoreClock / CONFIG_MDS_CLOCK_TICK_FREQ_HZ);
@@ -83,7 +83,7 @@ int main(void)
         case MDS_BOOT_RESULT_NONE:
         case MDS_BOOT_RESULT_SUCCESS:
         case MDS_BOOT_RESULT_ECHECK:
-            DRV_CHIP_JumpIntoVectorAddress((uintptr_t)JUMP_APP_ADDRESS);
+            DRV_CHIP_JumpIntoVectorAddress((uintptr_t)__APP_VECT_ADDRESS);
             break;
         case MDS_BOOT_RESULT_ERETRY:
             DRV_CHIP_JumpIntoDFU();

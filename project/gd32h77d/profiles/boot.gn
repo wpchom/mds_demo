@@ -14,7 +14,7 @@ declare_args() {
 
 default_args = {
   # project
-  project_profile = "apps"
+  project_profile = "boot"
   project_version = ""
 
   # profile

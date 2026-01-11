@@ -1,5 +1,11 @@
-# mbuild outdir
+# build outdir
 outdir/
+
+.idea/
+
+# xmake
+.xmake/
+build/
 
 # eclipse
 .cproject

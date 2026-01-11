@@ -8,6 +8,8 @@ void InitThread(MDS_Arg_t *arg)
 {
     UNUSED(arg);
 
+    __HAL_RCC_GPIOE_CLK_ENABLE();
+
     DEV_GPIO_Pin_t *pin = NULL;
     DEV_GPIO_Module_t *gpio = DEV_GPIO_ModuleCreate("gpio", &G_DRV_STM32H7XX_GPIO, NULL);
     if (gpio != NULL) {
@@ -16,6 +18,13 @@ void InitThread(MDS_Arg_t *arg)
     if (pin != NULL) {
         pin->object.GPIOx = GPIOE;
         pin->object.pinMask = 1 << 3;
+
+        DEV_GPIO_Config_t config = {
+            .mode = DEV_GPIO_MODE_OUTPUT,
+            .type = DEV_GPIO_TYPE_PP_UP,
+            .intr = DEV_GPIO_INTR_NONE,
+        };
+        DEV_GPIO_PinConfig(pin, &config);
     }
 
     for (;;) {

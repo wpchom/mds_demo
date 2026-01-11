@@ -10,7 +10,7 @@ import("${gnb_repo_dir}/gnbuild/toolchain.gni")
 
 # project
 declare_args() {
-  project_name = "demo_stm32f103"
+  project_name = "demo_gd32h77d"
   project_profile = "apps"
   project_version = ""
 }

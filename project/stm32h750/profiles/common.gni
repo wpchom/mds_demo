@@ -13,3 +13,6 @@ drv_chip_stm32h7xx_pkgpth =
 # mds
 mds_pkgpth = rebase_path("//../../public/mds")
 mds_core_arch = "cortex-m/thumbv7em"
+
+# drv_simulate
+drv_simulate_pkgpth = rebase_path("//../../public/driver/drv_simulate")

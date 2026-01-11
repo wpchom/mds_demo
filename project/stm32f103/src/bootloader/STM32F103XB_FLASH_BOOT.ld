@@ -119,6 +119,14 @@ SECTIONS
         PROVIDE_HIDDEN ( __zero_table_end__ = . );
     } > FLASH
 
+    .bootSwap ORIGIN(RAM) (NOLOAD) : {
+        . = ALIGN(4);
+
+        KEEP(*(.bootSwap .bootSwap.*))
+
+        . = ALIGN(4);
+    } > RAM
+
     .data : {
         . = ALIGN(4);
         PROVIDE ( __data_start = . );

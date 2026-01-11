@@ -1,16 +1,10 @@
 pkggroup("drv_chip_gd32e11x") {
 }
 
-pkggroup("mds_component") {
-}
-
 executable("${project_name}") {
   sources = [ "boot_main.c" ]
 
-  deps = [
-    ":drv_chip_gd32e11x",
-    ":mds_component",
-  ]
+  deps = [ ":drv_chip_gd32e11x" ]
 
   inputs = [ rebase_path("GD32E113CB_FLASH_BOOT.ld") ]
   ldflags = [ "-T" + rebase_path("GD32E113CB_FLASH_BOOT.ld") ]
@@ -21,9 +15,10 @@ executable("${project_name}") {
 arm_none_eabi_action("${project_name}.dis") {
   script = "objdump"
   args = [
-    "-SFhlx",
-    rebase_path("${root_out_dir}/${project_name}.elf") + " > " +
-        rebase_path("${root_out_dir}/${target_name}"),
+    "-SFhlxsd",
+    rebase_path("${root_out_dir}/${project_name}.elf"),
+    ">",
+    rebase_path("${root_out_dir}/${target_name}"),
   ]
   deps = [ ":${project_name}" ]
   outputs = [ "${root_out_dir}/${target_name}" ]

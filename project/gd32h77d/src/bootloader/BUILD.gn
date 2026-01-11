@@ -1,24 +1,15 @@
-pkggroup("stm32h7xx_device") {
-  deps = [ "system_stm32h7xx" ]
-}
-
-pkggroup("drv_chip_stm32h7xx") {
-}
-
-pkggroup("drv_simulate") {
+pkggroup("drv_chip_gd32h7xx") {
 }
 
 executable("${project_name}") {
   sources = [ "boot_main.c" ]
 
   deps = [
-    ":drv_chip_stm32h7xx",
-    ":drv_simulate",
-    ":stm32h7xx_device",
+    ":drv_chip_gd32h7xx",
   ]
 
-  inputs = [ rebase_path("STM32H750XB_FLASH_BOOT.ld") ]
-  ldflags = [ "-T" + rebase_path("STM32H750XB_FLASH_BOOT.ld") ]
+  inputs = [ rebase_path("GD32H77D_FLASH_BOOT.ld") ]
+  ldflags = [ "-T" + rebase_path("GD32H77D_FLASH_BOOT.ld") ]
 
   ldflags += [ "-Wl,-Map=" + rebase_path("${root_out_dir}/${target_name}.map") ]
 }
