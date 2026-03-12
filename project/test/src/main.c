@@ -1,7 +1,12 @@
 #include <stdio.h>
+#include <stdint.h>
+#include "mds_def.h"
+#include "mds_utils.h"
 
-int main() {
-    printf("Hello World!\n");
+static uint8_t g_heapTest[0x2000];
+void *__HeapBase = &(g_heapTest[0]);
+void *__HeapLimit = &(g_heapTest[0x2000]);
 
-    return 0;
+int main()
+{
 }

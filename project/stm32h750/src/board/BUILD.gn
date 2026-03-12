@@ -1,23 +1,22 @@
 pkggroup("stm32h7xx_device") {
-  deps = [ ":stm32h7xx_system" ]
+  deps = [ "system_stm32h7xx" ]
 }
 
 pkggroup("drv_chip_stm32h7xx") {
 }
 
-pkggroup("mds_component") {
-}
-
-pkggroup("mds_kernel") {
+pkggroup("drv_simulate") {
 }
 
 source_set("board_src") {
-  sources = []
+  sources = [
+    "brd_clock.c",
+    "brd_spi.c",
+  ]
 
   public_deps = [
     ":drv_chip_stm32h7xx",
-    ":mds_component",
-    ":mds_kernel",
+    ":drv_simulate",
     ":stm32h7xx_device",
   ]
 }

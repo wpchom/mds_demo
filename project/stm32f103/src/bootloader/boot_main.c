@@ -39,7 +39,8 @@ static size_t BOOT_FlashRead(MDS_BOOT_Device_t *dev, uintptr_t ofs, uint8_t *dat
     return (len);
 }
 
-static size_t BOOT_FlashWrite(MDS_BOOT_Device_t *dev, uintptr_t ofs, const uint8_t *data, size_t len)
+static size_t BOOT_FlashWrite(MDS_BOOT_Device_t *dev, uintptr_t ofs, const uint8_t *data,
+                              size_t len)
 {
     BOOT_FlashDevice_t *flashDev = (BOOT_FlashDevice_t *)dev;
 
@@ -78,9 +79,9 @@ int main(void)
         swapInfo->reset = BOOT_GetResetReason();
     }
 
-    MDS_BOOT_Result_t result = MDS_BOOT_UpgradeCheck(swapInfo, (MDS_BOOT_Device_t *)(&g_flashApp),
-                                                     (MDS_BOOT_Device_t *)(&g_flashDft),
-                                                     &G_BOOT_UPGRADE_OPS);
+    MDS_BOOT_Result_t result =
+        MDS_BOOT_UpgradeCheck(swapInfo, (MDS_BOOT_Device_t *)(&g_flashApp),
+                              (MDS_BOOT_Device_t *)(&g_flashDft), &G_BOOT_UPGRADE_OPS);
     switch (result) {
         case MDS_BOOT_RESULT_NONE:
         case MDS_BOOT_RESULT_SUCCESS:

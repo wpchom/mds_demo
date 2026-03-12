@@ -19,7 +19,7 @@ MEMORY
 __STACK_SIZE = 0x4000;
 __STACK_BASE = ORIGIN(DTCM) + LENGTH(DTCM) - __STACK_SIZE;
 __HEAP_SIZE = __StackLimit - __HeapBase;
-__APP_VECT_ADDRESS = ORIGIN(APP);
+/*__APP_VECT_ADDRESS = ORIGIN(APP);*/
 
 /* Linker script to place sections and symbol values. Should be used together
  * with other linker script that defines memory regions FLASH and RAM.

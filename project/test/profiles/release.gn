@@ -20,4 +20,7 @@ default_args = {
   profile_cflags_cc = []
   profile_arflags = []
   profile_ldflags = []
+
+  # mds
+  mds_pkgpth = rebase_path("//../../public/mds")
 }

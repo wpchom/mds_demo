@@ -2,7 +2,7 @@
 
 MDS_LOG_MODULE_DEFINE(boot);
 
-void InitThread(MDS_Arg_t *arg)
+void InitThread(MDS_Arg_t arg)
 {
     UNUSED(arg);
 
@@ -18,8 +18,8 @@ int main(void)
 
     MDS_LOG_D("startup");
 
-    MDS_Thread_t *thread = MDS_ThreadCreate("init", InitThread, NULL, 1024, MDS_THREAD_PRIORITY(10),
-                                            MDS_TIMEOUT_MS(10));
+    MDS_Thread_t *thread = MDS_ThreadCreate("init", InitThread, MDS_ARG_WITH(NULL), 1024,
+                                            MDS_THREAD_PRIORITY(10), MDS_TIMEOUT_MS(10));
     if (thread != NULL) {
         MDS_ThreadStartup(thread);
     }

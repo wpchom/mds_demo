@@ -7,12 +7,18 @@ static const struct GPIO_Desc {
     DEV_GPIO_Object_t object;
     DEV_GPIO_Config_t config;
 } G_GPIO_DESC[] = {
-    [0x00] = {.object = {.parent = "PA0", .GPIOx = GPIOA, .pinMask = GPIO_PIN_0, .initVal = 0x01},  // PA0
-              .config = {.mode = DEV_GPIO_MODE_INPUT, .type = DEV_GPIO_TYPE_PP_NO, .intr = DEV_GPIO_INTR_BOTH}},
+    [0x00] = {.object = {.parent = "PA0",
+                         .GPIOx = GPIOA,
+                         .pinMask = {GPIO_PIN_0},
+                         .initVal = {0x01}}, // PA0
+              .config = {.mode = DEV_GPIO_MODE_INPUT,
+                         .type = DEV_GPIO_TYPE_PP_NO,
+                         .intr = DEV_GPIO_INTR_BOTH}},
+
 };
 
 static DEV_GPIO_Module_t g_moduleGPIO;
-static DEV_GPIO_Pin_t g_pin[ARRAY_SIZE(G_GPIO_DESC)] = {0};
+static DEV_GPIO_Pin_t g_pin[ARRAY_SIZE(G_GPIO_DESC)];
 
 void BOARD_GPIO_Init(void)
 {
@@ -24,7 +30,8 @@ void BOARD_GPIO_Init(void)
     NVIC_EnableIRQ(EXTI1_IRQn);
     NVIC_EnableIRQ(EXTI2_IRQn);
 
-    MDS_Err_t err = DEV_GPIO_ModuleInit(&g_moduleGPIO, GPIO_MODULE, &G_DRV_STM32F1XX_GPIO, NULL, NULL);
+    MDS_Err_t err = DEV_GPIO_ModuleInit(&g_moduleGPIO, GPIO_MODULE, &G_DRV_STM32F1XX_GPIO,
+                                        MDS_DEVICE_HANDLE(NULL), MDS_ARG_WITH(NULL));
     if (!MDS_ErrIsSame(err, MDS_EOK)) {
         // MDS_LOG_E("[BRD_GPIO] DEV_GPIO_ModuleInit fail, err:%d", err.errno);
         return;
@@ -35,7 +42,8 @@ void BOARD_GPIO_Init(void)
         g_pin[idx].object.pinMask = G_GPIO_DESC[idx].object.pinMask;
         g_pin[idx].object.initVal = G_GPIO_DESC[idx].object.initVal;
 
-        err = DEV_GPIO_PinInit(&(g_pin[idx]), (const char *)G_GPIO_DESC[idx].object.parent, &g_moduleGPIO);
+        err = DEV_GPIO_PinInit(&(g_pin[idx]), (const char *)G_GPIO_DESC[idx].object.parent,
+                               &g_moduleGPIO);
         if (!MDS_ErrIsSame(err, MDS_EOK)) {
             MDS_LOG_E("[BRD_GPIO] DEV_GPIO_PinInit fail, err:%d", err.errno);
         } else {

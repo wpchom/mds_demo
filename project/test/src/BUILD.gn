@@ -1,8 +1,13 @@
+pkggroup("mds") {
+  deps = [ "kernel" ]
+}
+
 executable("${project_name}") {
   sources = [
     "main.c",
     # "test.c",
   ]
+  deps = [ ":mds" ]
 }
 
 gcc_action("${project_name}.dis") {

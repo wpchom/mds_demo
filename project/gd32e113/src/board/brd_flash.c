@@ -63,7 +63,7 @@ const MDS_FileSystem_t *FILE_SYSTEM_DATA(void)
 
     static const MDS_FileSystem_t fs = {
         .ops = &G_FILESYSTEM_EMFS_OPS,
-        .data = (MDS_Arg_t *)(&emfs),
+        .data = (MDS_Arg_t )(&emfs),
     };
 
     return ((MDS_ErrIsSame(err, MDS_EOK)) ? (&fs) : (NULL));
@@ -78,7 +78,7 @@ const MDS_FileSystem_t *FILE_SYSTEM_DATA(void)
         if (fn.fs == NULL) {                                                                                           \
             fn.fs = (MDS_FileSystem_t *)fileSystem;                                                                    \
             fn.path = (char *)filePath;                                                                                \
-            fn.data = (MDS_Arg_t *)(&fd);                                                                              \
+            fn.data = (MDS_Arg_t )(&fd);                                                                              \
         }                                                                                                              \
                                                                                                                        \
         return (&fn);                                                                                                  \

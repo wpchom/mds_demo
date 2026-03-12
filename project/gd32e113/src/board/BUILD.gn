@@ -10,8 +10,8 @@ config("board_inc") {
 
 source_set("board_src") {
   sources = [
-    "board_clock.c",
-    "board_flash.c",
+    "brd_clock.c",
+    "brd_flash.c",
 
     # "board_gpio.c",
   ]

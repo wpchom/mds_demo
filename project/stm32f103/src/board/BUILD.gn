@@ -10,8 +10,8 @@ pkggroup("mds") {
 
 source_set("board_src") {
   sources = [
-    "board_clock.c",
-    "board_gpio.c",
+    "brd_clock.c",
+    "brd_gpio.c",
   ]
 
   public_deps = [
