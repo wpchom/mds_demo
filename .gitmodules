@@ -1,3 +1,6 @@
+[submodule "gnb"]
+	path = gnb
+	url = git@github.com:wpchom/gnb.git
 [submodule "public/mds"]
 	path = public/mds
 	url = git@github.com:wpchom/mds.git
