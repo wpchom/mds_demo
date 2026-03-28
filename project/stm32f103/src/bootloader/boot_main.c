@@ -1,3 +1,5 @@
+#if 0
+
 #include "boot/mds_boot.h"
 #include "drv_chip.h"
 #include "drv_flash.h"
@@ -103,3 +105,7 @@ void SysTick_Handler(void)
 {
     MDS_SysTickHandler();
 }
+#endif
+
+void main(void)
+{}

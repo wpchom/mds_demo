@@ -1,10 +1,16 @@
-add_requires("cmsis", { system = false })
+add_requires("cmsis", { private = true, system = false })
 
 target("stm32f1xx_device", function()
     set_kind("static")
 
-    add_files("Source/Templates/system_stm32f1xx.c")
+    add_packages("cmsis")
     add_includedirs("Include", { public = true })
 
-    add_headerfiles("Include/(**.h)")
+    on_load(function(target)
+    --     target:add("files", "Source/Templates/" .. string.
+    --     lower(get_config("system")) .. ".c")
+
+    --     target:add("files", path.join("startup", "startup_" .. string.lower(get_config("chip")) .. ".c"))
+    --     -- target:add("defines", get_config("chip"), { public = true })
+    end)
 end)

@@ -36,8 +36,8 @@ package("arm_none_eabi_gcc", function()
         end
     end
 
-    on_install(function(package)
-        os.vcp("*", package:installdir())
+    on_install("@windows", "@linux", "@macosx", function(package)
+        os.vcp("*|manifest.txt", package:installdir())
     end)
 
     on_test(function(package)

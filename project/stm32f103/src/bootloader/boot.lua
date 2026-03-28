@@ -1,14 +1,13 @@
 includes("../board")
 
 add_requires("stm32f1xx_device")
-add_requireconfs("**", { configs = { srcdep = "tttt" } })
 
-target("stm32f103_apps", function()
+target("stm32f103_boot", function()
     set_kind("binary")
     set_version("0.0.1")
 
-    add_files("apps_main.c")
-    add_files("STM32F103XB_FLASH_APPS.ld")
+    add_files("boot_main.c")
+    add_files("STM32F103XB_FLASH_BOOT.ld")
 
     -- add_deps("board")
     add_packages("stm32f1xx_device")

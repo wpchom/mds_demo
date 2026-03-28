@@ -1,30 +1,33 @@
-#include "board.h"
+// #include "board.h"
 // #include "boot/mds_boot.h"
-#include "mds_sys.h"
+// #include "mds_sys.h"
 
+#include "stm32f1xx.h"
+
+#if 0
 MDS_LOG_MODULE_DEFINE(board, CONFIG_BOARD_LOG_LEVEL);
-
 void InitThread(MDS_Arg_t arg)
 {
     UNUSED(arg);
 
     MDS_InitExport();
 }
+#endif
 
 int main(void)
 {
-    BOARD_CLOCK_Init();
+    // BOARD_CLOCK_Init();
 
-    MDS_KernelInit();
+    // MDS_KernelInit();
 
     // MDS_BOOT_SwapInfo_t *swapInfo = MDS_BOOT_GetSwapInfo();
     // MDS_LOG_I("[boot] resetReaon:%lx", swapInfo->reset);
 
-    MDS_Thread_t *thread = MDS_ThreadCreate("init", InitThread, MDS_ARG_WITH(NULL), 1024,
-                                            MDS_THREAD_PRIORITY(10), MDS_TIMEOUT_TICKS(10));
-    if (thread != NULL) {
-        MDS_ThreadStartup(thread);
-    }
+    // MDS_Thread_t *thread = MDS_ThreadCreate("init", InitThread, MDS_ARG_WITH(NULL), 1024,
+    //                                         MDS_THREAD_PRIORITY(10), MDS_TIMEOUT_TICKS(10));
+    // if (thread != NULL) {
+    //     MDS_ThreadStartup(thread);
+    // }
 
-    MDS_KernelStartup();
+    // MDS_KernelStartup();
 }
