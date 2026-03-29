@@ -1,22 +1,21 @@
 -- repository
-add_repositories("local-repo ~/.gnb", { rootdir = os.scriptdir() })
+add_repositories("local-repo ~/code-workspace/gnb", { rootdir = os.scriptdir() })
 
 -- policy
 set_policy("build.intermediate_directory", false)
 set_policy("package.install_locally", true)
-set_policy("package.install_always", true)
 
 -- toolchain
 add_requires("arm-none-eabi-gcc 14.3.rel1", { system = false })
 set_defaultplat("cross")
--- set_defaultarchs("cortex-m3")
+set_defaultarchs("cortex-m3")
 
 toolchain("stm32f103_toolchain", function()
     set_kind("cross")
 
     on_load(function(toolchain)
         toolchain:load_cross_toolchain()
-        toolchain:add("cxflags", "-mcpu=cortex-m3", "-mthumb", "-msoft-float", { force = true })
+        toolchain:add("cxflags", "-mcpu=cortex-m3", "-mthumb", "-msoft-float", "-Og", { force = true })
         toolchain:add("ldflags", "-mcpu=cortex-m3", "-mthumb", "-msoft-float", { force = true })
         toolchain:add("shflags", "-mcpu=cortex-m3", "-mthumb", "-msoft-float", { force = true })
     end)
@@ -27,11 +26,4 @@ end)
 
 set_toolchains("stm32f103_toolchain@arm-none-eabi-gcc")
 
--- include
--- namespace("apps", function()
-includes("src/application")
--- end)
-
--- namespace("boot", function()
-includes("src/bootloader")
--- end)
+includes("../src/application")

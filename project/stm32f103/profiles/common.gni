@@ -1,0 +1,17 @@
+# package
+
+# arm_none_eabi_gcc
+arm_none_eabi_gcc_pkgver = "14.3.rel1"
+
+# stm32f1xx_device
+stm32f1xx_device_pkgcfg = {
+  device = "STM32F103xB"
+}
+
+# drv_chip_gd32e11x
+drv_chip_gd32e11x_pkgpth =
+    rebase_path("//../../public/driver/drv_chip_gd32e11x")
+
+# mds
+mds_pkgpth = rebase_path("//../../public/mds")
+mds_core_arch = "cortex-m/thumbv7em"

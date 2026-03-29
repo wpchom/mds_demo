@@ -1,17 +1,22 @@
 includes("../board")
 
-add_requires("stm32f1xx_device")
-add_requireconfs("**", { configs = { srcdep = "tttt" } })
+add_requireconfs("**stm32f1xx_device", { configs = { device = "STM32F103xB" } })
+add_requireconfs("**stm32f1xx_hal_driver", { configs = { confdir = path.join(os.scriptdir(), "../board") } })
 
-target("stm32f103_apps", function()
-    set_kind("binary")
+add_requires("stm32f1xx_hal_driver")
+
+target("apps", function()
     set_version("0.0.1")
+
+    set_kind("binary")
+    set_basename("stm32f103_apps")
+    set_extension(".elf")
 
     add_files("apps_main.c")
     add_files("STM32F103XB_FLASH_APPS.ld")
 
     -- add_deps("board")
-    add_packages("stm32f1xx_device")
+    add_packages("stm32f1xx_hal_driver")
 
     add_ldflags(
         "-nostartfiles",

@@ -1,15 +1,15 @@
 includes("../board")
 
-add_requires("stm32f1xx_device")
+add_requires("stm32f1xx_device~boot", {configs = {device = "STM32F103xB"}})
 
-target("stm32f103_boot", function()
+target("boot", function()
     set_kind("binary")
     set_version("0.0.1")
 
     add_files("./boot_main.c")
     add_files("STM32F103XB_FLASH_BOOT.ld")
 
-    -- add_deps("board")
+    add_deps("board")
     add_packages("stm32f1xx_device")
 
     add_ldflags(
