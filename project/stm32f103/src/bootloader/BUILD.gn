@@ -2,12 +2,12 @@ pkggroup("stm32f1xx_hal_driver") {
 }
 
 executable("${project_name}") {
-  sources = [ "apps_main.c" ]
+  sources = [ "boot_main.c" ]
 
   deps = [ ":stm32f1xx_hal_driver" ]
 
-  inputs = [ rebase_path("STM32F103XB_FLASH_APPS.ld") ]
-  ldflags = [ "-T" + rebase_path("STM32F103XB_FLASH_APPS.ld") ]
+  inputs = [ rebase_path("STM32F103XB_FLASH_BOOT.ld") ]
+  ldflags = [ "-T" + rebase_path("STM32F103XB_FLASH_BOOT.ld") ]
 
   ldflags += [ "-Wl,-Map=" + rebase_path("${root_out_dir}/${target_name}.map") ]
 }

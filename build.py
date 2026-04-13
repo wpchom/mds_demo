@@ -9,28 +9,6 @@ import subprocess
 sys.dont_write_bytecode = True
 
 
-def repo_check():
-    GNB_REPO_GIT = "https://github.com/wpchom/gnb.git"
-    GNB_REPO_DIR = os.environ.get("GNB_REPO_DIR")
-    GNB_REPO_DIR = (
-        os.path.join(f"{GNB_REPO_DIR}".replace("~", os.path.expanduser("~")))
-        if GNB_REPO_DIR != None
-        else os.path.join(os.path.expanduser("~"), ".gnb")
-    )
-
-    if not os.path.exists(GNB_REPO_DIR):
-        try:
-            os.system(f"git clone {GNB_REPO_GIT} {GNB_REPO_DIR}")
-        except:
-            print(
-                f"not exist `gnb`, prepare with: `git clone {GNB_REPO_GIT} ~/.gnb`",
-                flush=True,
-            )
-            exit(1)
-
-    return GNB_REPO_DIR
-
-
 def gnb_build(repo_dir, args, extra_args):
     profile_list = []
     profile_path = os.path.join(
@@ -93,13 +71,17 @@ def xmake_build(repo_dir, args, extra_args):
     for p in profile_list:
         output_dir = os.path.join(os.path.dirname(__file__), "output", args.project, p)
 
+        build_cmd = ["xmake", "build"]
+        build_cmd += ["-F", os.path.join(profile_path, p + ".lua")]
+
         if args.clean and os.path.exists(output_dir):
             shutil.rmtree(output_dir)
+            build_cmd += ["-r"]
 
         os.makedirs(output_dir, exist_ok=True)
 
-        build_cmd = ["xmake", "build", "-y"]
-        build_cmd += ["-F", os.path.join(profile_path, p + ".lua")]
+        if args.yes:
+            build_cmd += ["-y"]
 
         if args.verbose:
             build_cmd += ["-v"]
@@ -150,13 +132,14 @@ def main():
     parser.add_argument("-v", "--verbose", action="store_true", default=False)
     parser.add_argument("-c", "--clean", action="store_true", default=False)
     parser.add_argument("-x", "--xmake", action="store_true", default=False)
+    parser.add_argument("-y", "--yes", action="store_true", default=False)
 
     args = parser.parse_args(main_args)
 
     if args.verbose:
         print(args, extra_args)
 
-    repo_dir = repo_check()
+    repo_dir = os.path.join(os.path.dirname(__file__), "repo")
     if args.xmake:
         xmake_build(repo_dir, args, extra_args)
     else:

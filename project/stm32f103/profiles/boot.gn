@@ -25,8 +25,7 @@ default_args = {
   profile_cflags = target_flags + [
                      "-ffunction-sections",
                      "-fdata-sections",
-
-                     #  "-ffreestanding",
+                     "-ffreestanding",
 
                      "-Wall",
                      "-Wextra",
@@ -38,7 +37,7 @@ default_args = {
                      "-Wredundant-decls",
 
                      "-g",
-                     "-O2",
+                     "-Os",
                    ]
   profile_cflags_c = []
   profile_cflags_cc = []
@@ -54,11 +53,4 @@ default_args = {
                     ]
 
   import("//profiles/common.gni")
-
-  # gd32e113
-  drv_chip_without_irq = true
-
-  # mds
-  mds_with_nosys = true
-  mds_log_enable = false
 }
